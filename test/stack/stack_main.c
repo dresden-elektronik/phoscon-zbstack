@@ -3,6 +3,7 @@
 
 #include "test_harness.h"
 
+void caseStackVersionStringIsItsNumbers(void);
 void caseStackStartRefusesWhatItCannotStartFrom(void);
 void caseStackCoordinatorComesUp(void);
 void caseStackCoordinatorWithoutEntropyNamesItsKey(void);
@@ -42,6 +43,7 @@ int main(void)
 {
     Test_Begin("stack");
 
+    caseStackVersionStringIsItsNumbers();
     caseStackStartRefusesWhatItCannotStartFrom();
     caseStackCoordinatorComesUp();
     caseStackCoordinatorWithoutEntropyNamesItsKey();

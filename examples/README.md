@@ -80,7 +80,7 @@ Its endpoint 0x01 is a dimmable light that serves the Basic cluster: a Read Attr
 It brings one key, the global trust-centre link key; without `--config` it keeps nothing across runs, so each run joins again.
 With `--config` it saves its network as the coordinator does, and a later run reaches the coordinator again once link status has measured the link, about 30 s.
 
-Both print the same lines: `network` when the network is up, `joined` for a device that joined, `aps` for a frame that reached the application, `confirm` for a send's outcome, `rcp` when the RCP reset and came back, and `reset` once the RCP was reset and closed.
+Both print the same lines: `stack` with the stack's version as they start, `network` when the network is up, `joined` for a device that joined, `aps` for a frame that reached the application, `confirm` for a send's outcome, `rcp` when the RCP reset and came back, and `reset` once the RCP was reset and closed.
 
 ## `example_interview`
 

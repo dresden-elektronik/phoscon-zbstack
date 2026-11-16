@@ -358,6 +358,7 @@ int main(int argc, char **argv)
     if (options.config != 0 && !loadConfig(&options, &cfg))
         return 1;
 
+    printf("stack      Phoscon Zigbee Stack %s\n", ZB_VERSION_STRING);
     status = Zb_StackStart(&s_stack, &cfg);
 
     if (status != ZB_OK)

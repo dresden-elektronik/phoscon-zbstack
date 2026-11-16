@@ -284,6 +284,7 @@ int main(int argc, char **argv)
     configure(&cfg, &options);
     Interview_Init(&s_interview, &s_stack, APP_ENDPOINT);
 
+    printf("stack      Phoscon Zigbee Stack %s\n", ZB_VERSION_STRING);
     status = Zb_StackStart(&s_stack, &cfg);
 
     if (status != ZB_OK)

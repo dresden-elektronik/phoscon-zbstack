@@ -1148,8 +1148,9 @@
     "executable": "spinel_session"
   },
   "stack": {
-    "assertions": 335,
+    "assertions": 336,
     "caseOrder": [
+      "caseStackVersionStringIsItsNumbers",
       "caseStackStartRefusesWhatItCannotStartFrom",
       "caseStackCoordinatorComesUp",
       "caseStackCoordinatorWithoutEntropyNamesItsKey",
@@ -1183,7 +1184,7 @@
       "caseStackJoinerKeepsItsJoinedKey",
       "caseStackJoinerGivesUpOnASilentTrustCentre"
     ],
-    "cases": 32,
+    "cases": 33,
     "executable": "stack_contract"
   },
   "state": {

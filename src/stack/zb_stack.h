@@ -11,6 +11,7 @@
 #include "rcp_radio.h"
 #include "zb_core.h"
 #include "zb_status.h"
+#include "zb_version.h"
 
 enum
 {

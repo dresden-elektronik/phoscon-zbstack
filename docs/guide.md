@@ -221,6 +221,7 @@ A route handed back holds until a route record or a 0x0b replaces it, and no rel
 | remove another device, at the trust centre | `Zb_CoreRemove(core, ieee, nowMs)` |
 | forget a device's own link key at the trust centre, so the device can join again after a factory reset, which every joiner that updated its key needs (D-299) | `Zb_CoreForgetLinkKey(core, ieee)` |
 | bind, and read the counters | `Zb_CoreBindings`, `Zb_CoreJoinsHeard` and the other `Zb_Core` accessors |
+| show the stack's own version | `ZB_VERSION_STRING`, and `ZB_VERSION_MAJOR`, `_MINOR` and `_PATCH`, from `zb_version.h`, which `zb_stack.h` includes |
 | show the RCP's firmware | `RcpRadio_VersionText(&zb.rcp, out, cap)` once the network is up: its NCP_VERSION, such as `DSPINEL/1.0; AT86RF233; phoscon-rcp 0.2.0`, which names the radio and the release and no board (`docs/internals/hardware.md`) |
 | count what an event ring lost | `Nwk_SourceRouteNoticesDropped(&core->layers.nwk)`, `Nwk_AddressNoticesDropped(&core->layers.nwk)`, `Zb_CoreDeparturesDropped(core)` |
 | hear group frames for groups no endpoint is a member of | `Aps_SetGroupDelivery(&core->layers.aps, mode)` after each `ZB_EVENT_NETWORK_UP`: `APS_GROUP_DELIVERY_UNFILTERED` delivers one at endpoint 0xff, `APS_GROUP_DELIVERY_ENDPOINTS` one to each endpoint of the frame's profile (D-213, D-293) |

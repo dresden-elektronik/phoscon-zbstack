@@ -165,6 +165,41 @@ static const Zb_StackEvent *stackFirst(const StackSide *side, Zb_StackEventType 
     return 0;
 }
 
+/* One version part in decimal at `out`, answering its length. */
+static uint32_t versionPart(uint32_t value, char *out)
+{
+    char digits[10];
+    uint32_t count = 0;
+    uint32_t i;
+
+    do
+    {
+        digits[count++] = (char)('0' + value % 10);
+        value /= 10;
+    } while (value != 0);
+
+    for (i = 0; i < count; i++)
+        out[i] = digits[count - 1 - i];
+
+    return count;
+}
+
+/* The version an application reads is one number, spelt twice: the string is the three parts, and nothing else. */
+void caseStackVersionStringIsItsNumbers(void)
+{
+    char expected[40];
+    uint32_t len = 0;
+
+    len += versionPart(ZB_VERSION_MAJOR, expected + len);
+    expected[len++] = '.';
+    len += versionPart(ZB_VERSION_MINOR, expected + len);
+    expected[len++] = '.';
+    len += versionPart(ZB_VERSION_PATCH, expected + len);
+
+    Test_Expect(Zb_strlen(ZB_VERSION_STRING, 40) == len && Zb_memcmp(ZB_VERSION_STRING, expected, len) == 0,
+                "ZB_VERSION_STRING spells ZB_VERSION_MAJOR, _MINOR and _PATCH, dot separated");
+}
+
 void caseStackStartRefusesWhatItCannotStartFrom(void)
 {
     Zb_StackConfig cfg;

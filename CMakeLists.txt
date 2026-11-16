@@ -1,5 +1,12 @@
 cmake_minimum_required (VERSION 3.11)
-project (phoscon_zbstack C)
+
+# The version is src/zb/zb_version.h's, read here so the two cannot disagree.
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/src/zb/zb_version.h" ZB_VERSION_LINES REGEX "^#define ZB_VERSION_(MAJOR|MINOR|PATCH) ")
+string(REGEX REPLACE ".*ZB_VERSION_MAJOR ([0-9]+).*" "\\1" ZB_VERSION_MAJOR "${ZB_VERSION_LINES}")
+string(REGEX REPLACE ".*ZB_VERSION_MINOR ([0-9]+).*" "\\1" ZB_VERSION_MINOR "${ZB_VERSION_LINES}")
+string(REGEX REPLACE ".*ZB_VERSION_PATCH ([0-9]+).*" "\\1" ZB_VERSION_PATCH "${ZB_VERSION_LINES}")
+
+project (phoscon_zbstack VERSION ${ZB_VERSION_MAJOR}.${ZB_VERSION_MINOR}.${ZB_VERSION_PATCH} LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
