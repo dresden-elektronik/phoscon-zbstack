@@ -1,0 +1,36 @@
+# A coordinator's saved network, as example_coordinator --config writes it. A sample: nothing reads this file.
+# The coordinator forms the network and is its trust centre: address 0000, its own ieee as trust-centre.
+version 1
+channel 25
+link-key-seed 0F1E2D3C4B5A69788796A5B4C3D2E1F0
+state-version 1
+ieee 00212EFFFF00A001
+device-type 0
+trust-centre 00212EFFFF00A001
+pan BEEF
+extended-pan 00212EFFFF00A001
+network-address 0000
+update-id 0
+parent-information 0
+parent 0000
+parent-ieee 0000000000000000
+stack-profile 2
+security-level 5
+active-key 0
+authenticated 1
+all-fresh 1
+nwk-sequence 42
+routing-sequence 3
+mac-dsn 17
+aps-counter 9
+# key: sequence number, outgoing frame counter, the network key
+key 0 1530 A0A1A2A3A4A5A6A7A8A9AAABACADAEAF
+# window: a sender, the key it used, the next frame counter accepted from it
+window 00212EFFFF00B002 0 211
+window 00212EFFFF00C003 0 87
+# pair: device, short address, attributes, type, outgoing counter, features, link key; the global key names no device
+pair 0000000000000000 - 2 1 1 0 5A6967426565416C6C69616E63653039
+pair 00212EFFFF00B002 1A2B 2 0 4 0 3C8E1F0A9B2D4C6E8F1A3B5C7D9E0F21
+pair 00212EFFFF00C003 3C4D 2 0 2 0 7E6D5C4B3A2918070F1E2D3C4B5A6978
+# child: an end device that joined through this parent, its address, configuration and timeout
+child 00212EFFFF00C003 3C4D 0 8

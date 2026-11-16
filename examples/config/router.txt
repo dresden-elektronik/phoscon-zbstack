@@ -1,0 +1,31 @@
+# A router's saved network. A sample: nothing reads this file. It comes back at its address with no join, and it
+# can be a parent: it holds its children.
+version 1
+channel 25
+link-key-seed 00000000000000000000000000000000
+state-version 1
+ieee 00212EFFFF00B002
+device-type 1
+trust-centre 00212EFFFF00A001
+pan BEEF
+extended-pan 00212EFFFF00A001
+network-address 1A2B
+update-id 0
+parent-information 0
+parent 0000
+parent-ieee 0000000000000000
+stack-profile 2
+security-level 5
+active-key 0
+authenticated 1
+all-fresh 0
+nwk-sequence 118
+routing-sequence 0
+mac-dsn 64
+aps-counter 30
+# the network key the trust centre sent it
+key 0 905 A0A1A2A3A4A5A6A7A8A9AAABACADAEAF
+window 00212EFFFF00A001 0 1531
+# its own link key with the trust centre
+pair 00212EFFFF00A001 0000 2 0 6 0 3C8E1F0A9B2D4C6E8F1A3B5C7D9E0F21
+child 00212EFFFF00D004 5E6F 0 8

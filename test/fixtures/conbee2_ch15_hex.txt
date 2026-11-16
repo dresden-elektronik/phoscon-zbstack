@@ -1,0 +1,142 @@
+  -> reset
+  [status tid 0] 114 raw=80 06 00 72
+  -> PHY_ENABLED=true
+  [spinel tid 2 PHY_ENABLED] 01
+  -> PHY_CHAN=15
+  [spinel tid 3 PHY_CHAN] 0f
+  -> PROMISC=full
+  [spinel tid 4 MAC_PROMISCUOUS_MODE] 02
+  -> SADDR=0x4242
+  [spinel tid 5 MAC_15_4_SADDR] 42 42
+  -> PANID=0xffff
+  [spinel tid 6 MAC_15_4_PANID] ff ff
+  -> RAW_STREAM=true
+  [spinel tid 7 55] 01
+  -> verify PHY_CHAN
+  [spinel tid 8 PHY_CHAN] 0f
+  -> verify MAC_PROMISCUOUS_MODE
+  [spinel tid 9 MAC_PROMISCUOUS_MODE] 02
+  -> verify PHY_ENABLED
+  [spinel tid 10 PHY_ENABLED] 01
+  -> verify 8
+  [spinel tid 11 8] 00 21 2e ff ff 04 8a 12
+
+[sniffing /dev/ttyACM0 ch=15 promisc=full for 25.0s]
+[  12] ch=15 rssi= -94 len= 65 data 0x0000 -> 0xffff seq=223 ackreq nwkfcf=0x09 nwk 0x0000->0xfffc seq=7
+        41 88 df 20 de ff ff 00 00 09 12 fc ff 00 00 01 07 fb c5 00 ff ff 2e 21 00 28 06 c4 84 74 fb c5 00 ff ff 2e 21 00 00 2b 58 69 29 fd 78 d4 48 d9 5d f4 b9 95 eb 08 11 c8 6f a9 f3 fb 76 cc ba e5 ca
+[  13] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x3c1f seq=224 ackreq pending nwkfcf=0x08 nwk 0x0000->0x3c1f seq=8
+        61 88 e0 20 de 1f 3c 00 00 08 02 1f 3c 00 00 0a 08 28 07 c4 84 74 fb c5 00 ff ff 2e 21 00 00 eb 10 d9 e0 17 bf cd 98 19 96 1b c9 66 fd a3 b9
+[  14] ch=15 rssi= -94 len=  5 ack ? -> 0x6f55 seq=28 
+        02 00 1c 55 6f
+[  15] ch=15 rssi= -94 len=  5 ack ? -> 0x7edc seq=29 
+        02 00 1d dc 7e
+[  16] ch=15 rssi= -94 len=  5 ack ? -> 0x4c47 seq=30 
+        02 00 1e 47 4c
+[  17] ch=15 rssi= -94 len=  5 ack ? -> 0x5dce seq=31 
+        02 00 1f ce 5d
+[  18] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=225 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=9
+        61 88 e1 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 09 01 00 d5 fd 28 08 c4 84 74 fb c5 00 ff ff 2e 21 00 00 63 41 ed 19 7e 0d 35 c8 9d 3a a2 81 af a0
+[  19] ch=15 rssi= -94 len= 51 data 0x0000 -> 0xfdd5 seq=226 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=10
+        61 88 e2 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0a 01 00 d5 fd 28 09 c4 84 74 fb c5 00 ff ff 2e 21 00 00 43 a5 78 41 41 49 72 d3 a6 8f 9a c6 61 62 74 35
+[  20] ch=15 rssi= -94 len=  5 ack ? -> 0xb7a8 seq=34 
+        02 00 22 a8 b7
+[  21] ch=15 rssi= -76 len= 49 data 0x0000 -> 0xfdd5 seq=227 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=11
+        61 88 e3 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0b 01 00 d5 fd 28 0a c4 84 74 fb c5 00 ff ff 2e 21 00 00 d7 27 b7 b6 aa c7 b8 d3 a6 8f 9a c6 61 62
+[  22] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=227 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=11
+        61 88 e3 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0b 01 00 d5 fd 28 0a c4 84 74 fb c5 00 ff ff 2e 21 00 00 d7 27 b7 b6 aa c7 b8 d0 8a b0 19 9e ba 56
+[  23] ch=15 rssi= -94 len=  5 ack ? -> 0x686d seq=107 
+        02 00 6b 6d 68
+[  24] ch=15 rssi= -94 len= 51 data 0x0000 -> 0xfdd5 seq=228 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=12
+        61 88 e4 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0c 01 00 d5 fd 28 0b c4 84 74 fb c5 00 ff ff 2e 21 00 00 29 64 16 fb b6 52 a6 5e 3d ae 76 c3 44 37 ca 2b
+[  25] ch=15 rssi= -94 len=  5 ack ? -> 0xf18c seq=38 
+        02 00 26 8c f1
+[  26] ch=15 rssi= -94 len=  5 ack ? -> 0xe005 seq=39 
+        02 00 27 05 e0
+[  27] ch=15 rssi= -94 len= 55 data 0x0000 -> 0xfdd5 seq=230 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=14
+        61 88 e6 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0e 01 00 d5 fd 28 0d c4 84 74 fb c5 00 ff ff 2e 21 00 00 fe 63 69 65 c4 d4 62 38 07 28 50 df 34 e5 5e a5 84 b9 1d fe
+[  28] ch=15 rssi= -94 len=  5 ack ? -> 0x3be0 seq=42 
+        02 00 2a e0 3b
+[  29] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=231 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=15
+        61 88 e7 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 0f 01 00 d5 fd 28 0e c4 84 74 fb c5 00 ff ff 2e 21 00 00 b3 ed 3c 94 a8 df bd cd 67 8b 4e ae 94 f2
+[  30] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=232 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=16
+        61 88 e8 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 10 01 00 d5 fd 28 0f c4 84 74 fb c5 00 ff ff 2e 21 00 00 4c d3 31 66 2a 27 0f 69 99 09 88 07 84 7c cc af 1c 7a 52
+[  31] ch=15 rssi= -94 len= 60 data 0x0000 -> 0xfdd5 seq=233 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=17
+        61 88 e9 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 11 01 00 d5 fd 28 10 c4 84 74 fb c5 00 ff ff 2e 21 00 00 1e fa 61 ea c1 10 41 fd 91 f9 fc 0c ec 65 c4 5a a8 3a c3 84 f8 9b dc 0c e4
+[  32] ch=15 rssi= -94 len=  5 ack ? -> 0x7dc4 seq=46 
+        02 00 2e c4 7d
+[  33] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=234 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=18
+        61 88 ea 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 12 01 00 d5 fd 28 11 c4 84 74 fb c5 00 ff ff 2e 21 00 00 d4 ed 58 99 83 52 e0 bd 59 5d fe 3f 5d 5c
+[  34] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=235 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=19
+        61 88 eb 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 13 01 00 d5 fd 28 12 c4 84 74 fb c5 00 ff ff 2e 21 00 00 e0 c7 93 3c 1f 93 d8 02 10 f7 6e bc 4f e9 97 dc c5 35 73
+[  35] ch=15 rssi= -94 len= 55 data 0x0000 -> 0xfdd5 seq=236 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=20
+        61 88 ec 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 14 01 00 d5 fd 28 13 c4 84 74 fb c5 00 ff ff 2e 21 00 00 81 56 d8 dc 65 b5 77 10 d7 21 63 f1 27 7d 58 fb 7e 33 69 9f
+[  36] ch=15 rssi= -94 len=  5 ack ? -> 0xa729 seq=50 
+        02 00 32 29 a7
+[  37] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=237 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=21
+        61 88 ed 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 15 01 00 d5 fd 28 14 c4 84 74 fb c5 00 ff ff 2e 21 00 00 5e 07 4c 54 3b c8 c5 b3 a3 8a 90 a7 e7 af
+[  38] ch=15 rssi= -94 len= 55 data 0x0000 -> 0xfdd5 seq=239 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=23
+        61 88 ef 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 17 01 00 d5 fd 28 16 c4 84 74 fb c5 00 ff ff 2e 21 00 00 26 06 c2 37 1e a7 62 e7 4b 1a d7 56 f9 9b e2 41 af 69 61 de
+[  39] ch=15 rssi= -94 len=  5 ack ? -> 0xe10d seq=54 
+        02 00 36 0d e1
+[  40] ch=15 rssi= -94 len= 49 data 0x0000 -> 0xfdd5 seq=240 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=24
+        61 88 f0 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 18 01 00 d5 fd 28 17 c4 84 74 fb c5 00 ff ff 2e 21 00 00 ec 7d c9 e6 6a 84 76 d5 8c f7 88 a2 05 3e
+[  41] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=241 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=25
+        61 88 f1 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 19 01 00 d5 fd 28 18 c4 84 74 fb c5 00 ff ff 2e 21 00 00 b3 5e b8 a7 ff 7b 84 0b b9 b9 07 c1 e1 72 13 a9 95 51 b4
+[  42] ch=15 rssi= -94 len= 64 data 0x0000 -> 0xfdd5 seq=242 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=26
+        61 88 f2 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 1a 01 00 d5 fd 28 19 c4 84 74 fb c5 00 ff ff 2e 21 00 00 8f aa 52 d1 ef 97 61 9f e6 e1 c2 f8 07 c1 44 d5 fd d9 e1 ce 16 e7 25 39 c2 f4 9c 8d b5
+[  43] ch=15 rssi= -94 len=  5 ack ? -> 0x2b61 seq=58 
+        02 00 3a 61 2b
+[  44] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=244 ackreq pending nwkfcf=0x48 nwk 0x0000->0x3c1f seq=28
+        61 88 f4 20 de d5 fd 00 00 48 06 1f 3c 00 00 0a 1c 01 00 d5 fd 28 1b c4 84 74 fb c5 00 ff ff 2e 21 00 00 70 82 47 6f a0 53 f1 95 92 f9 7f c4 b4 6d b5 05 29 52 19
+[  45] ch=15 rssi= -94 len= 56 data 0x0000 -> 0xffff seq=245 ackreq nwkfcf=0x08 nwk 0x0000->0xfffd seq=29
+        41 88 f5 20 de ff ff 00 00 08 02 fd ff 00 00 0a 1d 28 1c c4 84 74 fb c5 00 ff ff 2e 21 00 00 95 d1 c1 41 f9 60 e3 62 ef 1a 9b 4f 63 3b c9 08 10 f1 0d e0 2a 9b 25 51 06
+[  46] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x05a7 seq=246 ackreq pending nwkfcf=0x08 nwk 0x0000->0x05a7 seq=30
+        61 88 f6 20 de a7 05 00 00 08 02 a7 05 00 00 0a 1e 28 1d c4 84 74 fb c5 00 ff ff 2e 21 00 00 73 d1 07 42 3e 94 aa 34 9a 4b 7e 7b 36 08 74 d1
+[  47] ch=15 rssi= -94 len=  5 ack ? -> 0xb5b8 seq=0 
+        02 00 00 b8 b5
+[  48] ch=15 rssi= -94 len=  5 ack ? -> 0xa431 seq=1 
+        02 00 01 31 a4
+[  49] ch=15 rssi= -94 len=  5 ack ? -> 0x1cd2 seq=108 
+        02 00 6c d2 1c
+[  50] ch=15 rssi= -94 len=  5 ack ? -> 0x96aa seq=2 
+        02 00 02 aa 96
+[  51] ch=15 rssi= -94 len= 45 data 0x0000 -> 0x05a7 seq=247 ackreq pending nwkfcf=0x08 nwk 0x0000->0x05a7 seq=31
+        61 88 f7 20 de a7 05 00 00 08 02 a7 05 00 00 0a 1f 28 1e c4 84 74 fb c5 00 ff ff 2e 21 00 00 ef 25 00 79 4a 51 04 c8 64 b2 39 78 5f 96
+  !! truncated dst: 63 88 6d 20 de
+[  53] ch=15 rssi= -94 len=  5 ack ? -> 0x0d5b seq=109 
+        02 00 6d 5b 0d
+[  54] ch=15 rssi= -94 len= 65 data 0x0000 -> 0xffff seq=248 ackreq nwkfcf=0x09 nwk 0x0000->0xfffc seq=32
+        41 88 f8 20 de ff ff 00 00 09 12 fc ff 00 00 01 20 fb c5 00 ff ff 2e 21 00 28 1f c4 84 74 fb c5 00 ff ff 2e 21 00 00 a3 f3 f4 69 62 75 e2 c3 5a 29 89 79 f8 de 70 74 46 e1 98 b3 fd ac 06 a5 bb 36
+[  55] ch=15 rssi= -94 len=  5 ack ? -> 0x38f8 seq=25 
+        02 00 19 f8 38
+[  56] ch=15 rssi= -94 len=  5 ack ? -> 0xdff6 seq=249 
+        02 00 f9 f6 df
+[  57] ch=15 rssi= -94 len=  5 ack ? -> 0xed6d seq=250 
+        02 00 fa 6d ed
+[  58] ch=15 rssi= -94 len=  5 ack ? -> 0x0a63 seq=26 
+        02 00 1a 63 0a
+[  59] ch=15 rssi= -94 len=  5 ack ? -> 0x7ccc seq=63 
+        02 00 3f cc 7c
+[  60] ch=15 rssi= -94 len=  5 ack ? -> 0xf7bc seq=64 
+        02 00 40 bc f7
+[  61] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=252 ackreq pending nwkfcf=0x48 nwk 0x0000->0x928d seq=36
+        61 88 fc 20 de d5 fd 00 00 48 06 8d 92 00 00 0a 24 01 00 d5 fd 28 23 c4 84 74 fb c5 00 ff ff 2e 21 00 00 4b 7d 5b a6 93 b8 4a db 2b 20 69 ff ab 75 3f cb 73 8c 58
+[  62] ch=15 rssi= -94 len=  5 ack ? -> 0xd4ae seq=66 
+        02 00 42 ae d4
+[  63] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=253 ackreq pending nwkfcf=0x48 nwk 0x0000->0x928d seq=37
+        61 88 fd 20 de d5 fd 00 00 48 06 8d 92 00 00 0a 25 01 00 d5 fd 28 24 c4 84 74 fb c5 00 ff ff 2e 21 00 00 c1 48 52 15 e3 27 6d f0 0e c9 78 ad a3 57 6e 36 73 7e a0
+[  64] ch=15 rssi= -94 len=  5 ack ? -> 0xb198 seq=68 
+        02 00 44 98 b1
+[  65] ch=15 rssi= -94 len= 54 data 0x0000 -> 0xfdd5 seq=254 ackreq pending nwkfcf=0x48 nwk 0x0000->0x928d seq=38
+        61 88 fe 20 de d5 fd 00 00 48 06 8d 92 00 00 0a 26 01 00 d5 fd 28 25 c4 84 74 fb c5 00 ff ff 2e 21 00 00 dc 20 77 b2 a8 b9 9d 89 0d 80 23 ca 49 cd 64 4d 17 15 24
+[  66] ch=15 rssi= -94 len=  5 ack ? -> 0x928a seq=70 
+        02 00 46 8a 92
+[  67] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x0000 seq=111 ackreq pending cmd=unknown-0x04 params=e8 29
+        63 88 6f 20 de 00 00 29 3c 04 e8 29
+
+=== summary ===
+frame classes: {'status': 1, 'spinel': 10, 'data': 27, 'ack': 27, 'bad': 1, 'cmd': 1}
+PAN ids seen: {'0xde20': 28}
+     src frames          rssi  resolved EUI-64 / peers
+0x000000     27   -94..-76     00:21:2e:ff:ff:00:c5:fb   0xfdd5×21, 0xffff×3, 0x05a7×2, 0x3c1f×1
+0x003c29      1   -94..-94     -                         0x0000×1

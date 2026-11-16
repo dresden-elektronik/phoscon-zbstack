@@ -1,0 +1,41 @@
+mode       path: RcpRadio_Seam behind the tee
+device     /dev/ttyACM0
+stack      coordinator, own short 0xdead, PAN 0xbeef, channel 26, rxOnWhenIdle 1
+           the identity band A was told to apply: channel, page, pan, short, extended address, rxOnWhenIdle
+           ownIeee 00212effff048a12, transmitted as 12 8a 04 ff ff 2e 21 00, nwk sequence seeded 0x11, mac dsn seeded 0x21, no jitter seed
+security   level 0x00, no security config, no key material
+request    unicast data to 0x1234 endpoint 02 from endpoint 01, profile 0x0104, cluster 0x0006
+           TxOptions 0x04, asdu 6 octets, Radius 0 (the network layer's own default)
+           asdu       66 72 61 6d 65 64
+dialect    DSPINEL/1.0; AT86RF233
+bring-up   running in 14 pumps over 33 ms, last error 0, 0 frame(s) taken off the link on the way
+identity   the extended address this device reported as its factory one
+           ownIeee for the security config 00212effff048a12, transmitted as 12 8a 04 ff ff 2e 21 00, the factory address as this device reported it 12 8a 04 ff ff 2e 21 00
+armed      channel 26  pan 0xbeef  short 0xdead  rxOnWhenIdle 1, read back through the seam after
+           5 pumps put band A's own PIB write on the link; the tee forwards, so the stick is armed
+           as the sender of the frame it was asked to carry
+send       --tx and --allow-tx both named: the tee forwards tx to the backend
+request    the façade answered ok at t+45 ms
+confirm    aps counter 00  refused  aps status 0xff  attempts 1  dst 0x1234 ep 02 <- ep 01
+counters   aps queue 0 refused 0  nwk queue 0 refused 0  mac outstanding 0 refused 0
+tee        records 4  refused by the tee 0  backend tx calls 4  completion calls 11  drops 0
+tee 0      33 octets handed tx  ackRequest 1  issued 1  handle 1  the seam answered ok  completion status refused acked 0 retries 0  device code 17  device said pending 0 header-updated 0
+            61 88 21 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 7e 14
+tee 1      33 octets handed tx  ackRequest 1  issued 1  handle 2  the seam answered ok  completion status refused acked 0 retries 0  device code 17  device said pending 0 header-updated 0
+            61 88 22 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 3c 17
+tee 2      33 octets handed tx  ackRequest 1  issued 1  handle 3  the seam answered ok  completion status refused acked 0 retries 0  device code 17  device said pending 0 header-updated 0
+            61 88 23 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 0d ee
+tee 3      33 octets handed tx  ackRequest 1  issued 1  handle 4  the seam answered ok  completion status refused acked 0 retries 0  device code 17  device said pending 0 header-updated 0
+            61 88 24 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 b8 11
+field mac  fcf 61 88  data v0  security 0  ack 1  pending 0  pan-compressed 1  dst 16-bit src 16-bit
+           seq 21  dst pan 0xbeef  dst 0x1234  src 0xdead  header 9 octets at 0..8
+           footer 7e 14 at 31..32  validates against the octets ahead of it: the host's own
+           arithmetic, which the RCP is measured replacing
+field nwk  fcf 48 00  data  protocol 2  discover 1  security 0  source-route 0  dst ieee 0  src ieee 0
+           dst 0x1234  src 0xdead  radius 30  sequence 11  header 8 octets at 9..16  payload 14
+field aps  fcf 40  data  unicast  security 0  ack-request 1  extended header 0
+           dst ep 02  src ep 01  cluster 0x0006  profile 0x0104  aps counter 00  header 8 octets
+field asdu 6 octets at 25..30: 66 72 61 6d 65 64  the same as the request's own octets, in the clear where the data header put them
+link       requests 22 replies 21 notifications 1 stale 0 timeouts 0 malformed 0  rxOverflows 0 linkDrops 0 writeFailures 0 resets 1  heard 0
+reset      RESET issued through RcpRadio_Restart, 3 pumps put it on the link, then band B's
+           teardown writes and the close: the stick is left unarmed

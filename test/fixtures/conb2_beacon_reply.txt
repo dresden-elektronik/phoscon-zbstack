@@ -1,0 +1,376 @@
+== session transcript: R23.1 3.6.5's on-demand beacon, answered on the air and heard by the asker ==
+
+== pairing: the two ConBee IIs, channel 12, PAN 0xbeef, both sticks driven through band B's seam with --mac. The responder is /dev/ttyACM1 (conb2-old), the asker is /dev/ttyACM0 (conb2). Every transmit carries --allow-tx; nothing is transmitted on channel 15 or 20 and no PAN 0xde20 is touched. Four runs, each on the same quiet channel and the same private PAN, one stick probed at a time. ==
+
+== The beacon payload is R23.1 Table 3-83's fifteen octets, given on every responder command as --beacon-info 0022848877665544332211ffffff00. ==
+
+run 1 — the delegated command set: conbee2-b armed with --short 0000 and answering beacons, conbee2-a at short 0x0001 asking 7.3.7's Beacon Request and then keeping its own window
+
+$ ./build/host/rcp_probe --path /dev/ttyACM1 --channel 12 --pan beef --short 0000 --mac --beacon-answer --beacon-info 0022848877665544332211ffffff00 --listen 40 > /tmp/responder.txt 2>&1 &
+$ sleep 6
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --timeout 5000
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --mac --listen 12 --hex
+$ wait
+
+-- the responder, conbee2-b, verbatim --
+device     /dev/ttyACM1
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 05 a8 88  (address order) = 88:a8:05:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 28 pumps over 83 ms
+addressed  short 0x0000  pan 0xbeef  written: pan 
+seam pib   after the writes: channel 12  short 0xffff  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+beacon     a Beacon Request is answered, PAN coordinator, association permit set, payload 15 B
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 1 consumed as this device's own, 0 acknowledgments, 0 other commands
+beacons    1 requests heard, 1 answered, 0 ignored, 0 refused, 0 pending dropped
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 16  replies 15  notifications 18  stale 4  timeouts 0  malformed 0
+
+-- the asker's Beacon Request, conbee2-a, verbatim: the transmit invocation carries its own 10-second window after the request --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 25 pumps over 74 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 1 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 3  stale 4  timeouts 0  malformed 0
+
+-- the asker's 12-second window, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 24 pumps over 71 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 17  replies 16  notifications 1  stale 4  timeouts 0  malformed 0
+
+run 2 — the responder's command unchanged and the asker writing its own 64-bit address, two exchanges in one responder window
+
+$ ./build/host/rcp_probe --path /dev/ttyACM1 --channel 12 --pan beef --short 0000 --mac --beacon-answer --beacon-info 0022848877665544332211ffffff00 --listen 40 > /tmp/responderE.txt 2>&1 &
+$ sleep 6
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --pib-ieee 00aabbccddeeff11 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --timeout 5000 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --pib-ieee 00aabbccddeeff11 --mac --listen 12 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --pib-ieee 00aabbccddeeff11 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --timeout 5000 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0001 --pib-ieee 00aabbccddeeff11 --mac --listen 12 --hex
+$ wait
+
+-- the responder, conbee2-b, verbatim --
+device     /dev/ttyACM1
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 05 a8 88  (address order) = 88:a8:05:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 31 pumps over 78 ms
+addressed  short 0x0000  pan 0xbeef  written: pan 
+seam pib   after the writes: channel 12  short 0xffff  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+beacon     a Beacon Request is answered, PAN coordinator, association permit set, payload 15 B
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac confirm  dsn 01  ok  acked 0  (band A collected the completion; band B only carried it)
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 2 consumed as this device's own, 0 acknowledgments, 0 other commands
+beacons    2 requests heard, 2 answered, 0 ignored, 0 refused, 0 pending dropped
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 17  replies 16  notifications 22  stale 4  timeouts 0  malformed 0
+
+-- run 2: the asker's first Beacon Request, conbee2-a, verbatim. The transmit invocation carries its own 10-second window after the request --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 73 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan ieee 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac ind   1  t+147 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 00  payload 19 B  footer validates
+           00 c0 00 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 ee f7 
+mac ind   2  t+147 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 00  payload 19 B  footer validates
+           00 c0 00 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 ee f7 
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 2  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 19  replies 18  notifications 3  stale 4  timeouts 0  malformed 0
+
+-- run 2: the asker's first 12-second window, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 30 pumps over 75 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan ieee 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 1  stale 4  timeouts 0  malformed 0
+
+-- run 2: the asker's second Beacon Request, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 72 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan ieee 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac ind   1  t+140 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 01  payload 19 B  footer validates
+           00 c0 01 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 1d d7 
+mac ind   2  t+140 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 01  payload 19 B  footer validates
+           00 c0 01 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 1d d7 
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 2  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 19  replies 18  notifications 3  stale 4  timeouts 0  malformed 0
+
+-- run 2: the asker's second 12-second window, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 72 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan ieee 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 1  stale 4  timeouts 0  malformed 0
+
+run 3 — the same two exchanges with the responder armed at a 16-bit address instead: conbee2-b at short 0x0001, conbee2-a at short 0x0002
+
+$ ./build/host/rcp_probe --path /dev/ttyACM1 --channel 12 --pan beef --short 0001 --mac --beacon-answer --beacon-info 0022848877665544332211ffffff00 --listen 70 > /tmp/responder2.txt 2>&1 &
+$ sleep 6
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0002 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --timeout 5000 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0002 --mac --listen 12 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0002 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --timeout 5000 --hex
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0002 --mac --listen 12 --hex
+$ wait
+
+-- the responder, conbee2-b, verbatim --
+device     /dev/ttyACM1
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 05 a8 88  (address order) = 88:a8:05:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 30 pumps over 76 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+beacon     a Beacon Request is answered, PAN coordinator, association permit set, payload 15 B
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac confirm  dsn 01  ok  acked 0  (band A collected the completion; band B only carried it)
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 2 consumed as this device's own, 0 acknowledgments, 0 other commands
+beacons    2 requests heard, 2 answered, 0 ignored, 0 refused, 0 pending dropped
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 19  replies 18  notifications 23  stale 4  timeouts 0  malformed 0
+
+-- run 3: the asker's first Beacon Request, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 72 ms
+addressed  short 0x0002  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0002  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac ind   1  t+143 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0001 pan 0xbeef  seq 00  payload 19 B  footer validates
+           00 80 00 ef be 01 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 28 f2 
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 3  stale 3  timeouts 0  malformed 0
+
+-- run 3: the asker's first 12-second window, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 26 pumps over 66 ms
+addressed  short 0x0002  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0002  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 17  replies 16  notifications 1  stale 4  timeouts 0  malformed 0
+
+-- run 3: the asker's second Beacon Request, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 28 pumps over 71 ms
+addressed  short 0x0002  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0002  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+mac ind   1  t+142 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0001 pan 0xbeef  seq 01  payload 19 B  footer validates
+           00 80 01 ef be 01 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 6c a9 
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 3  stale 4  timeouts 0  malformed 0
+
+-- run 3: the asker's second 12-second window, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 73 ms
+addressed  short 0x0002  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0002  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 17  replies 16  notifications 1  stale 4  timeouts 0  malformed 0
+
+run 4 — the Beacon Request's own octets, printed by a band B listener on conbee2-b (no --mac on that side, so band A does not consume the request and band B prints the PSDU) while conbee2-a asks
+
+$ ./build/host/rcp_probe --path /dev/ttyACM1 --channel 12 --pan beef --short 0001 --listen 18 --hex > /tmp/diagC_listener.txt 2>&1 &
+$ sleep 3
+$ ./build/host/rcp_probe --path /dev/ttyACM0 --channel 12 --pan beef --short 0002 --mac --dst-pan ffff --dst ffff --mac-frame command --payload 07 --src-mode none --tx --allow-tx --tx-wait 4000 --listen 8
+$ wait
+
+-- the band B listener, conbee2-b, verbatim --
+device     /dev/ttyACM1
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 05 a8 88  (address order) = 88:a8:05:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 27 pumps over 69 ms
+addressed  short 0x0001  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0001  pan 0xbeef  rxOnWhenIdle 0  (short set)
+frame   1  len  10  rssi  -94  lqi 255  at + 3148 ms  device stamp 2966510816  ok
+           command seq 00  two PAN fields  dst 16-bit  pan ffff  dst 0xffff  payload 1  07   footer ok
+           03 08 00 ff ff ff ff 07 38 29 
+scans      0 dwells asked, 0 ended with nothing to report
+counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 14  replies 13  notifications 8  stale 4  timeouts 0  malformed 0
+
+-- the asker, conbee2-a, verbatim --
+device     /dev/ttyACM0
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=1 psduIncludesFcs=1 hasAckMetadata=0 handlesAckTimeout=1
+HWADDR       00 21 2e ff ff 04 8a 12  (address order) = 12:8a:04:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 12
+brought up running in 29 pumps over 72 ms
+addressed  short 0x0002  pan 0xbeef  written: short pan 
+seam pib   after the writes: channel 12  short 0x0002  pan 0xbeef  rxOnWhenIdle 0  (short set)
+mac        band A adopted the seam; it reports from here on
+mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0
+mac confirm  dsn 00  ok  acked 0  (band A collected the completion; band B only carried it)
+scans      0 dwells asked, 0 ended with nothing to report
+mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands
+counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0
+           requests 18  replies 17  notifications 2  stale 4  timeouts 0  malformed 0
+
+== notes ==
+
+The three beacons these runs put in front of the asker, in two shapes, with band A's dissection line quoted whole:
+
+| run | the responder's address | the beacon's octets | the dissection line |
+| --- | --- | --- | --- |
+| 2 | no 16-bit address: a 64-bit source of eight zero octets | `00 c0 00 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 ee f7` | `mac ind   1  t+147 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 00  payload 19 B  footer validates` |
+| 2 | the same, second exchange | `00 c0 01 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 1d d7` | `mac ind   1  t+140 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0000 pan 0xbeef  seq 01  payload 19 B  footer validates` |
+| 3 | short 0x0001 | `00 80 00 ef be 01 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 28 f2` | `mac ind   1  t+143 ms  beacon  v0   dst 0x0000 pan 0x0000  src 0x0001 pan 0xbeef  seq 00  payload 19 B  footer validates` |
+
+1. The Beacon Request the asker puts on the air. Run 4 prints it as band B's ten octets, `03 08 00 ff ff ff ff 07 38 29`, with the dissection line `command seq 00  two PAN fields  dst 16-bit  pan ffff  dst 0xffff  payload 1  07   footer ok` (**measured**). The Frame Control Field is its first two octets, `03 08`, which is 0x0803 with the field's own octet order undone (**derived**); no printed line of this tool carries a numeric Frame Control value, so that number is the octets' reading and not a printed field (**measured**: the lines are quoted here whole and none of them carries it). The asker's own report of the same transmit is `mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0` (**measured**), and `mac confirm  dsn 00  ok  acked 0` is the completion band A collected for it (**measured**). Run 2's asker prints the same request line, its `--pib-ieee` naming an address the request does not carry (**measured**: the request's own octets in run 4 have neither address field).
+
+2. The beacon the asker hears. Run 2: `00 c0 00 ef be 00 00 00 00 00 00 00 00 ff cf 00 00 00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00 ee f7` — thirty-four octets, counted from the printed hex, the tool printing no length on a `mac ind` line (**derived**). Band A reads it as a beacon and says so: the dissection line names the type `beacon` and the frame version `v0` (**measured**), so the frame is a beacon and neither data nor a command. Run 3 prints a twenty-eight octet beacon in the same shape with a 16-bit source (**measured**). Three things on that line are the tool's printing and not the frame's fields: `dst 0x0000 pan 0x0000` names a destination this frame does not carry, the line printing the zero-initialised destination fields of a frame whose Destination Addressing Mode is 0; `src 0x0000` names no source, the line printing only a 16-bit source and leaving the 64-bit one unprinted, where the octets carry eight zero octets in that place (**measured** for the octets, **derived** for the reading of the line). Run 2's asker is shown each beacon twice, two `mac ind` lines with the same number of octets, the same octets, the same `t+` stamp and consecutive numbers (**measured**); the responder's own counters state one request heard and one beacon answered per exchange (**measured**), so whether the second copy is the stick's duplicate or a second transmission the responder does not count is **open**.
+
+3. That beacon's Frame Control Field, one subfield at a time, from run 2's octets `00 c0`, which is 0xC000 (**derived** from them). Frame type, bits 0..2, is 0: Table 7-1's beacon (**derived**, and the dissection line's `beacon` agrees, **measured**). Acknowledgment request, bit 5, is 0 (**derived**): nothing is asked of the air in return. Destination addressing mode, bits 10..11, is 0 (**derived**): the frame carries no destination PAN and no destination address, which is why the source PAN `ef be` follows the sequence number directly. Source addressing mode, bits 14..15, is 3 (**derived**): a 64-bit extended source, the eight octets `00 00 00 00 00 00 00 00`; run 3's field, `00 80` = 0x8000, differs only there, bits 14..15 = 2, a 16-bit source of `01 00`, the address that stick was armed at (**derived**, **measured** for the address `addressed  short 0x0001  pan 0xbeef`). Frame version, bits 12..13, is 0 (**derived**, and `v0` on the dissection line agrees, **measured**).
+
+4. The beacon's Superframe Specification as it appears on the wire: the two octets `ff cf` in every run, that is 0xCFFF (**derived**). Its subfields, read from those bits: Beacon Order 15, Superframe Order 15, Final CAP Slot 15, PAN coordinator 1, Association Permit 1, with battery-life extension 0 and the reserved bit 0 (**derived**; the responder's configuration line agrees in words, `beacon     a Beacon Request is answered, PAN coordinator, association permit set, payload 15 B`, **measured**). The two octets after it are the GTS Specification `00` and the Pending Address Specification `00`: no GTS is described and no address is stated as pending, and the responder's counter `0 pending dropped` and its transaction queue holding nothing agree (**measured**, **derived**).
+
+5. The fifteen beacon payload octets as they appear on the wire: `00 22 84 88 77 66 55 44 33 22 11 ff ff ff 00`, the same fifteen in every run (**measured**). They are the fifteen the responder is configured with: the command carries `--beacon-info 0022848877665544332211ffffff00`, and the octets come back in that order, unchanged (**measured**). They sit after the octets above, the beacon's MAC payload being 19 octets — 2 of Superframe Specification, 1 of GTS Specification, 1 of Pending Address Specification, and these 15 (**derived** from the printed octets and the line's `payload 19 B`).
+
+6. The responder's own counters. Run 2, one session answering both exchanges: `beacons    2 requests heard, 2 answered, 0 ignored, 0 refused, 0 pending dropped` (**measured**), with one completion per beacon it transmitted, `mac confirm  dsn 00  ok  acked 0` and `mac confirm  dsn 01  ok  acked 0` (**measured**), and `mac frames 0 delivered, 2 consumed as this device's own, 0 acknowledgments, 0 other commands` (**measured**) — the two frames it consumes as its own being the returns of its own two beacons, whose numbers are the BSNs the two completion lines print (**derived** from the two counts and the two completions). Run 1, one exchange: `beacons    1 requests heard, 1 answered, 0 ignored, 0 refused, 0 pending dropped` (**measured**). Run 3, one session answering both exchanges: `beacons    2 requests heard, 2 answered, 0 ignored, 0 refused, 0 pending dropped` (**measured**). Every responder session in these runs prints `writeFailures 0` (**measured**): no property write it made failed.
+
+7. The asker's counters, invocation by invocation, with the line the tool prints for what band A made of the traffic it was shown:
+
+| run | invocation | `mac frames` line | `counters` line |
+| --- | --- | --- | --- |
+| 1 | request | `mac frames 0 delivered, 1 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 1 | window | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 2 | request 1 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 2  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 2 | window 1 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 2 | request 2 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 2  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 2 | window 2 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 3 | request 1 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 3 | window 1 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 3 | request 2 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+| 3 | window 2 | `mac frames 0 delivered, 0 consumed as this device's own, 0 acknowledgments, 0 other commands` | `counters   frames 0  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1  framesNamingAck 0` |
+
+Every value is as printed (**measured**). `framesNamingAck` is 0 in every one of them, and the stick's own capability line reads `RADIO_CAPS   0x010f [ACK_TIMEOUT ENERGY_SCAN TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]` with `hasAckMetadata=0` (**measured**), so this counter has nothing to count at this revision (**derived**). The `mac frames` line's first number is 0 while `counters frames` is not: the first is the queue a poll of indications empties, the second is what that poll took (**derived** from the two lines of the same session). The two 12-second windows hear nothing at all (**measured**): the beacon exists only as the answer to a request, and each window opens after the answer has been given.
+
+8. Whether the second exchange reproduces the first. It does, in both runs that carry two exchanges (**measured**). Run 2's two beacons differ in two octets and one number: the sequence number, `00` then `01`, which is the beacon's own BSN and not the request's DSN, and with it the footer, `ee f7` then `1d d7`; the beacon arrives at `t+147 ms` and at `t+140 ms` of the asker's own clock. Nothing else differs: the same 34 octets otherwise, the same `ff cf` Superframe Specification, the same fifteen payload octets, the same `payload 19 B` and `footer validates`, and the responder answers both requests inside its one 40-second window (**measured**). Run 3's two beacons differ the same way, `seq 00` then `seq 01`, footer `28 f2` then `6c a9`, at `t+143 ms` and `t+142 ms`, and each is one clean delivery where run 2's is reported twice (**measured**). The two runs' windows are not of one length: run 2's responder keeps a 40-second window, so its second request lands at about 30 s of it and the second 12-second window runs past that window's close, while run 3's responder keeps a 70-second window that both exchanges fit inside (**measured** from the commands and the `t+` stamps).
+
+What this run does not show. No acknowledgment exists anywhere in this exchange, so nothing here measures one. 7.2.2.1.1's acknowledgment request subfield is 0 in the beacon's Frame Control Field — run 2's `00 c0` and run 3's `00 80` each carry bit 5 clear (**derived**) — and the beacon's own confirmation reads `acked 0` (**measured**), band A's seam request for it being made with `ackRequest 0` (**measured**). 7.5.2 sets the same subfield to 0 on the Beacon Request: its octets `03 08` carry bit 5 clear (**derived**), the asker names no acknowledgment (**measured**, `mac tx     requested by band A  command  dst 0xffff pan 0xffff  payload 1 B  ackRequest 0`), and every asker counter reads `0 acknowledgments` with `framesNamingAck 0` (**measured**). The beacon's delivery to the asker is a promiscuous-plain reception: the tool writes no filter of its own, band B's arming order leaves the stick in `MAC_PROMISCUOUS_MODE` full, and the beacon carries no destination at all (**derived** from the arming order and from the frame's octets; no line of these transcripts reports a filtered delivery either way, **open** as a printed claim). A statement about a *filtered* device hearing a beacon is therefore not made by this run.
+
+Why run 1 shows no beacon. Run 1's responder answers — its counter line reads `beacons    1 requests heard, 1 answered, 0 ignored, 0 refused, 0 pending dropped` and it collects a completion for the beacon it transmitted (**measured**) — while the asker's request invocation counts one frame as its own and delivers none, `mac frames 0 delivered, 1 consumed as this device's own` with `counters frames 0` (**measured**). The beacon of run 2, whose responder command is run 1's unchanged, carries a 64-bit source of eight zero octets (**measured**), and band A holds that same value for a stick whose extended address nothing has written, so that frame is read as this device's own and consumed as an echo (**derived**; the only input that changed between run 1 and run 2 is the asker's `--pib-ieee`). `--short 0000` writes no short address at all: run 1's responder prints `addressed  short 0x0000  pan 0xbeef  written: pan` and then `seam pib   after the writes: channel 12  short 0xffff  pan 0xbeef  rxOnWhenIdle 0  (short set)` (**measured**), so band A on that stick has no 16-bit address it may put in a beacon and reaches for the extended one (**derived** from the two beacon shapes of runs 2 and 3). Whether a coordinator actually armed at 0x0000 puts that address in a beacon is **open**: this tool cannot arm one there, and no other tool here writes the field.

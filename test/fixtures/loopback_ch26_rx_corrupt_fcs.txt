@@ -1,0 +1,13 @@
+device     /dev/ttyACM1
+dialect    DSPINEL  "DSPINEL/1.0; AT86RF233"
+api        RCP 4, host must be at least 4, interface type 3
+RADIO_CAPS   0x010d [ACK_TIMEOUT TRANSMIT_RETRIES CSMA_BACKOFF RX_ON_WHEN_IDLE]
+           hasTransmit=1 hasEnergyScan=0 psduIncludesFcs=1 hasAckMetadata=0
+HWADDR       00 21 2e ff ff 05 a8 88  (address order) = 88:a8:05:ff:ff:2e:21:00  (Zigbee display)
+armed      channel 26
+brought up running in 26 pumps over 76 ms
+frame   1  len  19  rssi  -94  lqi 255  at + 4088 ms  device stamp 3746415816  ok
+           data seq 1e  pan-compressed  dst 16-bit  pan beef  src 16-bit  dst 0xffff  src 0xdead  payload 8  6c 6f 6f 70 62 61 63 6b   footer ok
+           41 88 1e ef be ff ff ad de 6c 6f 6f 70 62 61 63 6b a8 1f 
+counters   frames 1  flagged 0  linkDrops 0  portDrops 0  rejects 0  overflows 0  writeFailures 0  resets 1
+           requests 12  replies 11  notifications 2  stale 4  timeouts 0  malformed 0

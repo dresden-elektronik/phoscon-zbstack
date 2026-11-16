@@ -1,0 +1,28 @@
+# An end device's saved network. A sample: nothing reads this file. It keeps its parent by both addresses and the
+# keepalive the parent named (parent-information), and holds no children.
+version 1
+channel 25
+link-key-seed 00000000000000000000000000000000
+state-version 1
+ieee 00212EFFFF00C003
+device-type 2
+trust-centre 00212EFFFF00A001
+pan BEEF
+extended-pan 00212EFFFF00A001
+network-address 3C4D
+update-id 0
+parent-information 2
+parent 0000
+parent-ieee 00212EFFFF00A001
+stack-profile 2
+security-level 5
+active-key 0
+authenticated 1
+all-fresh 0
+nwk-sequence 23
+routing-sequence 0
+mac-dsn 12
+aps-counter 5
+key 0 88 A0A1A2A3A4A5A6A7A8A9AAABACADAEAF
+window 00212EFFFF00A001 0 1530
+pair 00212EFFFF00A001 0000 2 0 3 0 7E6D5C4B3A2918070F1E2D3C4B5A6978

@@ -1,0 +1,50 @@
+# Vendored third-party code (docs/internals/refs.md §6).
+
+Every file below is byte-identical to the pinned upstream revision. Nothing here is
+restyled, renamed or patched: a capability a vendored library lacks goes upstream, it is
+not added locally. test/vendor_audit.py re-hashes this tree and fails the build on drift.
+
+u_bstream is pinned at its tag v1.3.0, which carries the C99 guard on its 64-bit
+accessors (__STDC_VERSION__ >= 199901L); v1.2.0 gated them on C11 and would drop them
+under this tree's -std=c99. u_sstream is pinned at its tag v1.5.2, which carries the fix to
+U_sstream_put_double for negative values in (-1, 0) and a 10_put_str test that
+initialises its buffer, so the test passes in a Release build too.
+
+
+[library]
+name=u_bstream
+upstream=https://git.sr.ht/~cryo/u_bstream
+commit=e4ed3be5c20331f40c388218f308a589ff9f47eb
+latest_tag=v1.3.0
+license=3-clause BSD, vendor/u_bstream/LICENSE.txt
+[files]
+u_bstream.c=01a77bf970c72cf8b8924bcd59e66182a4d5dc0145f295b9c8781ef1eaf31d17
+u_bstream.h=0d679534f2cd4acf57a72511ab4d4ef9e8086fffb470c630194c6b01143476af
+LICENSE.txt=fcec6125f57188ed1952c73e9c1a953bc8e109739a93f32d8870c878b8ab8bfe
+README.md=2c7c4b95cc351e61921398d90d6e41c3cc7dc767207817f5cc6a682725cce71a
+
+[library]
+name=u_sstream
+upstream=https://git.sr.ht/~cryo/u_sstream
+commit=03f45b897141d1a29a22157a9e0d07089f2d41ed
+latest_tag=v1.5.2
+license=3-clause BSD, vendor/u_sstream/LICENSE.txt
+[files]
+u_sstream.c=16ac95b6f4c9c54cedbed86e44d1514e0c0a01e81c9cf8a88f3b2055a69d3afd
+u_sstream.h=310bf1f0b3f0b58a8e22370ddda4199c5adfd5e87aea03e4d2379791d327eb9f
+LICENSE.txt=fcec6125f57188ed1952c73e9c1a953bc8e109739a93f32d8870c878b8ab8bfe
+README.md=2ee10146c7c5f3d1083f84758eac5009c4d6b4c2136b547403d760d81013c526
+tests/01_get_long.c=e2fe208aae733ecf1fa0ddf3fa005b9cf94ca248dda655677823f4f5c2d5b00e
+tests/02_get_double.c=9799f3925339acab83f1cc8d091421bd6db9177cda9e2659646fdf3715fbbb3f
+tests/03_find.c=3db69203930dcfdc5e08e36f27b605d063bb186f7ca493d34b8d831594a97d2e
+tests/04_put_double.c=2fc848840abee0c82b07d0b1c75b33d01805313b3a74f315560f3ea89f827a26
+tests/05_init.c=842acb6cbf0f738713f0be97857b396d074c0ec0eb04c6ffa34ef1213b16c060
+tests/06_starts_with_verify_params.c=8006ebec348bb6a8f9151a2cbefe53fbe5bbfe17b9ef788fd99d7f1461570b57
+tests/07_find_verify_params.c=c4517da3f176500d0b458d99faaa0a23e3596be82df9d73a26aa2c326d813455
+tests/08_put_long_edge_cases.c=05fd28007f2cb9a330bfaf2c300a179b6f831c703fa42fc5c463bab471d95edb
+tests/09_strtod_overflow.c=9caee285ffae7b865a44d2bce2e06f500fd0f01ef055dddaacb013891aef16c0
+tests/10_put_str.c=8111b33b84e88fca59fa4fd8e8297c00f0745f6258031c05e67685733b2692c4
+tests/11_strtol_overflow.c=f7c48ec00cfd64612194a1d06f41a0f613cdcfe266083393e446aa9138c4f663
+tests/12_put_hex.c=0d7a0b5edaf7d9b0f32e126f39e582cebade4880658297d350edcd407125daea
+tests/13_put_longlong.c=80da306c3871c583ca23769cc7f14df382ffb74d1b35297bad7dfc883878a454
+tests/14_compare.c=4d027f7c454b4da60358383f4c529002324902b0d606d351add4ba19b0d461c2

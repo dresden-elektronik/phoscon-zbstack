@@ -1,0 +1,46 @@
+  -> reset
+  [status tid 0] 114 raw=80 06 00 72
+  -> PHY_ENABLED=true
+  [spinel tid 2 PHY_ENABLED] 01
+  -> PHY_CHAN=26
+  [spinel tid 3 PHY_CHAN] 1a
+  -> PROMISC=full
+  [spinel tid 4 MAC_PROMISCUOUS_MODE] 02
+  -> SADDR=0x4242
+  [spinel tid 5 MAC_15_4_SADDR] 42 42
+  -> PANID=0xffff
+  [spinel tid 6 MAC_15_4_PANID] ff ff
+  -> RAW_STREAM=true
+  [spinel tid 7 MAC_RAW_STREAM_ENABLED] 01
+  -> verify PHY_CHAN
+  [spinel tid 8 PHY_CHAN] 1a
+  -> verify MAC_PROMISCUOUS_MODE
+  [spinel tid 9 MAC_PROMISCUOUS_MODE] 02
+  -> verify PHY_ENABLED
+  [spinel tid 10 PHY_ENABLED] 01
+  -> verify HWADDR
+  [spinel tid 11 HWADDR] 00 21 2e ff ff 05 a8 88
+
+[sniffing /dev/ttyACM1 ch=26 promisc=full for 30.0s]
+[  12] ch=26 rssi= -89 len= 33 data 0xdead -> 0x1234 seq=33 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 21 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 7e 14
+[  13] ch=26 rssi= -89 len= 33 data 0xdead -> 0x1234 seq=34 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 22 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 3c 17
+[  14] ch=26 rssi= -89 len= 33 data 0xdead -> 0x1234 seq=35 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 23 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 0d ee
+[  15] ch=26 rssi= -88 len= 33 data 0xdead -> 0x1234 seq=36 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 24 ef be 34 12 ad de 48 00 34 12 ad de 1e 11 40 02 06 00 04 01 01 00 66 72 61 6d 65 64 b8 11
+[  16] ch=26 rssi= -88 len= 51 data 0xdead -> 0x1234 seq=33 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 21 ef be 34 12 ad de 48 02 34 12 ad de 1e 11 28 00 00 00 00 12 8a 04 ff ff 2e 21 00 00 1e b8 3c 12 6c 02 b8 15 df 48 54 69 f8 46 e6 c4 cc 7f 63 a5
+[  17] ch=26 rssi= -89 len= 51 data 0xdead -> 0x1234 seq=34 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 22 ef be 34 12 ad de 48 02 34 12 ad de 1e 11 28 01 00 00 00 12 8a 04 ff ff 2e 21 00 00 28 f7 cb 09 c0 eb c5 d4 44 1f a9 ce d9 c8 bd d5 58 36 c2 c1
+[  18] ch=26 rssi= -89 len= 51 data 0xdead -> 0x1234 seq=35 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 23 ef be 34 12 ad de 48 02 34 12 ad de 1e 11 28 02 00 00 00 12 8a 04 ff ff 2e 21 00 00 fb 8c fb 24 67 de c6 6a fa 63 05 53 a2 d7 42 5b 97 d1 1e d8
+[  19] ch=26 rssi= -89 len= 51 data 0xdead -> 0x1234 seq=36 ackreq nwkfcf=0x48 nwk 0xdead->0x1234 seq=17
+        61 88 24 ef be 34 12 ad de 48 02 34 12 ad de 1e 11 28 03 00 00 00 12 8a 04 ff ff 2e 21 00 00 21 d9 49 12 d5 2f c7 d0 f8 38 06 e4 4c 44 90 9d cd 84 07 cb
+
+=== summary ===
+frame classes: {'status': 1, 'spinel': 10, 'data': 8}
+PAN ids seen: {'0xbeef': 8}
+     src frames          rssi  resolved EUI-64 / peers
+0x00dead      8   -89..-88     -                         0x1234×8

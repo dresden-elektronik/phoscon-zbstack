@@ -1,0 +1,306 @@
+  -> reset
+  [status tid 0] 114 raw=80 06 00 72
+  -> PHY_ENABLED=true
+  [spinel tid 2 PHY_ENABLED] 01
+  -> PHY_CHAN=15
+  [spinel tid 3 PHY_CHAN] 0f
+  -> PROMISC=full
+  [spinel tid 4 MAC_PROMISCUOUS_MODE] 02
+  -> SADDR=0x4242
+  [spinel tid 5 MAC_15_4_SADDR] 42 42
+  -> PANID=0xffff
+  [spinel tid 6 MAC_15_4_PANID] ff ff
+  -> RAW_STREAM=true
+  [spinel tid 7 MAC_RAW_STREAM_ENABLED] 01
+[   8] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=115  nwkfcf=0x09 nwk 0x0000->0xfffc seq=220
+        41 88 73 20 de ff ff 00 00 09 12 fc ff 00 00 0a dc fb c5 00 ff ff 2e 21 00 28 e0 23 85 74 fb c5 00 ff ff 2e 21 00 00 e8 59 1c 9f 76 67 d4 2b 72 31 7d 88 1c dc 59 6d 4f c6 f5 c9
+[   9] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=116  nwkfcf=0x09 nwk 0x0000->0xfffc seq=220
+        41 88 74 20 de ff ff 00 00 09 12 fc ff 00 00 0a dc fb c5 00 ff ff 2e 21 00 28 e1 23 85 74 fb c5 00 ff ff 2e 21 00 00 0f 3d 32 e2 c3 a6 f3 ae af af f8 84 5d 3a 1e d7 60 ce 85 83
+  -> verify PHY_CHAN
+  [spinel tid 8 PHY_CHAN] 0f
+[  11] ch=15 rssi= -94 len= 47 data 0x0000 -> 0xfdd5 seq=117 ackreq nwkfcf=0x08 nwk 0x0000->0xfdd5 seq=223
+        61 88 75 20 de d5 fd 00 00 08 02 d5 fd 00 00 0a df 28 e2 23 85 74 fb c5 00 ff ff 2e 21 00 00 da 8d 34 62 4b a7 75 7c ee 44 2b ab f2 72 36 ec
+[  12] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=118  nwkfcf=0x09 nwk 0x0000->0xfffc seq=220
+        41 88 76 20 de ff ff 00 00 09 12 fc ff 00 00 0a dc fb c5 00 ff ff 2e 21 00 28 e3 23 85 74 fb c5 00 ff ff 2e 21 00 00 2b e7 d0 dd 42 09 91 7d 2c f8 81 ac 5b f8 82 13 9a e9 02 c8
+  -> verify MAC_PROMISCUOUS_MODE
+  [spinel tid 9 MAC_PROMISCUOUS_MODE] 02
+[  14] ch=15 rssi= -94 len= 47 data 0x0000 -> 0xfdd5 seq=119 ackreq nwkfcf=0x08 nwk 0x0000->0xfdd5 seq=224
+        61 88 77 20 de d5 fd 00 00 08 02 d5 fd 00 00 0a e0 28 e4 23 85 74 fb c5 00 ff ff 2e 21 00 00 8b 62 a6 92 c2 f3 e4 80 34 a4 a5 e5 dc 30 76 ab
+  -> verify PHY_ENABLED
+  [spinel tid 10 PHY_ENABLED] 01
+[  16] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=120 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=225
+        61 88 78 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a e1 01 00 1f 3c 28 e5 23 85 74 fb c5 00 ff ff 2e 21 00 00 21 11 ac bc 01 1a 79 51 22 06 f7 4b fc b7 60 3b b2 34 e2 cb 6c 86 df 5a 27 9c
+  -> verify HWADDR
+  [spinel tid 11 HWADDR] 00 21 2e ff ff 04 8a 12
+
+[sniffing /dev/ttyACM0 ch=15 promisc=full for 40.0s]
+[  18] ch=15 rssi= -94 len= 47 data 0x0000 -> 0xfdd5 seq=121 ackreq nwkfcf=0x08 nwk 0x0000->0xfdd5 seq=227
+        61 88 79 20 de d5 fd 00 00 08 02 d5 fd 00 00 0a e3 28 e6 23 85 74 fb c5 00 ff ff 2e 21 00 00 49 31 1b fb 35 e9 19 db 59 96 48 f9 9b 3a fe b5
+[  19] ch=15 rssi= -94 len= 65 data 0x0000 -> 0xffff seq=122  nwkfcf=0x09 nwk 0x0000->0xfffc seq=226
+        41 88 7a 20 de ff ff 00 00 09 12 fc ff 00 00 01 e2 fb c5 00 ff ff 2e 21 00 28 e7 23 85 74 fb c5 00 ff ff 2e 21 00 00 f8 89 9e 2e 34 88 51 2d 6b 4a 61 e4 aa 72 87 28 6c 29 0d aa e6 10 1e 5e cc bb
+[  20] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=230 ackreq cmd=data-request params=73 eb
+        63 88 e6 20 de 1f 3c 29 3c 04 73 eb
+[  21] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=123  nwkfcf=0x09 nwk 0x0000->0xfffc seq=229
+        41 88 7b 20 de ff ff 00 00 09 12 fc ff 00 00 0a e5 fb c5 00 ff ff 2e 21 00 28 e8 23 85 74 fb c5 00 ff ff 2e 21 00 00 a6 aa 2b b0 f2 24 e5 36 6d 97 c4 bc fa 24 3f 08 54 ed 20 11
+[  22] ch=15 rssi= -94 len= 47 data 0x0000 -> 0xfdd5 seq=124 ackreq nwkfcf=0x08 nwk 0x0000->0xfdd5 seq=232
+        61 88 7c 20 de d5 fd 00 00 08 02 d5 fd 00 00 0a e8 28 e9 23 85 74 fb c5 00 ff ff 2e 21 00 00 50 68 d8 a4 09 bb 6a 8b d7 60 8b bd 77 a8 f3 63
+[  23] ch=15 rssi= -94 len= 69 data 0x05a7 -> 0xfc1f seq=66  nwkfcf=0x08 nwk 0x5a6b->0xffad seq=180
+        41 88 42 20 de 1f fc a7 05 08 12 ad ff 6b 5a 1a b4 a9 8a ec 0b 00 6f 0d 00 28 cb c0 02 00 8c 0f c0 fe ff 17 0b 00 fa 4a 7b 87 2e f8 e9 28 62 76 40 df 50 ab a6 fa be 73 4a 88 8b 1d e9 58 4b 4c 9d a7 e2 b9 1b
+[  24] ch=15 rssi= -94 len= 48 data 0x0000 -> 0xfdd5 seq=126 ackreq nwkfcf=0x08 nwk 0x0000->0xfdd5 seq=233
+        61 88 7e 20 de d5 fd 00 00 08 02 d5 fd 00 00 0a e9 28 eb 23 85 74 fb c5 00 ff ff 2e 21 00 00 71 1c 63 fe 4d 3b 24 df b5 e1 8c 0f 41 aa 12 4b 71
+[  25] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=127  nwkfcf=0x09 nwk 0x0000->0xfffc seq=229
+        41 88 7f 20 de ff ff 00 00 09 12 fc ff 00 00 0a e5 fb c5 00 ff ff 2e 21 00 28 ec 23 85 74 fb c5 00 ff ff 2e 21 00 00 26 08 ca 28 31 43 75 b2 11 a4 5e 74 b0 c6 5a a0 67 8c 9e 40
+[  26] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=128  nwkfcf=0x09 nwk 0x0000->0xfffc seq=229
+        41 88 80 20 de ff ff 00 00 09 12 fc ff 00 00 0a e5 fb c5 00 ff ff 2e 21 00 28 ed 23 85 74 fb c5 00 ff ff 2e 21 00 00 22 07 08 cc 82 4f 8f 1b d1 86 a2 b2 ee e9 ec d1 7f ad 63 91
+[  27] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x05a7 seq=130 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=235
+        61 88 82 20 de a7 05 00 00 48 02 a7 05 00 00 0a eb 28 ef 23 85 74 fb c5 00 ff ff 2e 21 00 00 b9 27 e1 7f 6c e3 2f a4 2e 75 b6 3b 52 80 63 75
+[  28] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x05a7 seq=131 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=236
+        61 88 83 20 de a7 05 00 00 48 02 a7 05 00 00 0a ec 28 f0 23 85 74 fb c5 00 ff ff 2e 21 00 00 3d b4 4c fd 96 33 51 d3 1c 67 81 09 b4 42 f9 1f
+[  29] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x05a7 seq=131 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=236
+        61 88 83 20 de a7 05 00 00 48 02 a7 05 00 00 0a ec 28 f0 23 85 74 fb c5 00 ff ff 2e 21 00 00 3d b4 4c fd 96 33 51 d3 1c 67 81 09 b4 42 f9 1f
+[  30] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=132 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=237
+        61 88 84 20 de a7 05 00 00 48 02 a7 05 00 00 0a ed 28 f1 23 85 74 fb c5 00 ff ff 2e 21 00 00 cb e7 fb 02 73 8e fa d9 46 b5 5c 38 ae 97 40 37 cc 6b c3
+[  31] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=231 ackreq cmd=data-request params=cc 6a
+        63 88 e7 20 de 1f 3c 29 3c 04 cc 6a
+  !! too short for FCF: 
+[  33] ch=15 rssi= -94 len=  5 ack fcs-ok seq=41 
+        02 00 29 7b 09
+[  34] ch=15 rssi= -94 len=  5 ack fcs-ok seq=42 
+        02 00 2a e0 3b
+[  35] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=134 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=239
+        61 88 86 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a ef 01 00 1f 3c 28 f3 23 85 74 fb c5 00 ff ff 2e 21 00 00 6e 71 6a f5 62 1c 5c 3d 36 42 46 3f d1 0e
+[  36] ch=15 rssi= -94 len= 54 data 0x0000 -> 0x3c1f seq=135 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=240
+        61 88 87 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a f0 01 00 1f 3c 28 f4 23 85 74 f5 c5 00 ff ff 2e 21 00 00 e1 f2 b6 2b ae b9 7f 33 05 d5 3d 2c f2 9c ac 1f 15 aa dd
+[  37] ch=15 rssi= -94 len= 62 data 0x05a7 -> 0xfff5 seq=68  nwkfcf=0x09 nwk 0x05a7->0xfffc seq=67
+        41 88 44 20 de f5 ff a7 05 09 12 fc ff a7 05 01 43 4c 9f c3 fe ff 5b 0b 00 28 cd c0 02 60 8c 0f c3 8e 1f 17 0b 0c 0d 63 de d3 76 f2 3f c1 f8 d9 dc 99 eb 2a af 5d 21 be 6c 88 31 8e 4c fe
+[  38] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=136 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=241
+        61 88 88 20 de a7 05 00 00 48 02 a7 05 00 00 0a f1 28 f5 23 85 74 fb c5 00 ff ff 2e 21 00 00 cc a5 2a 28 fc cf 02 fc 6c f1 d1 20 e9 2f 80 59 41 46 10
+[  39] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x05a7 seq=138 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=243
+        61 88 8a 20 de a7 05 00 00 48 02 a7 05 00 00 0a f3 28 f7 23 85 74 fb c5 00 ff ff 2e 21 00 00 d5 83 a0 cd c5 b5 75 3f 9c f0 8c 11 e9 41 7a 44
+[  40] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=232 ackreq cmd=data-request params=7e db
+        63 88 e8 20 de 1f 3c 29 3c 04 7e db
+[  41] ch=15 rssi= -94 len= 78 data 0x0000 -> 0xffff seq=139  nwkfcf=0x08 nwk 0x0000->0xfffc seq=242
+        41 88 8b 20 de ff ff 00 00 08 02 fc ff 00 00 0a f2 28 f8 23 85 74 fb c5 00 ff ff 2e 21 00 00 f6 a7 f9 46 e1 5f ee 14 47 9b 69 42 c7 c7 30 20 a3 2c cb 8f 80 cc 38 b2 87 32 23 b4 5c 8f 7d 89 96 94 af fb 17 27 89 22 8b 91 13 24 60 6f 2e
+[  42] ch=15 rssi= -94 len= 52 data 0x976e -> 0x3c1f seq=206 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=4
+        61 88 ce 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 04 28 53 57 13 04 11 11 11 ff ff 2e 21 00 00 a3 51 53 77 69 fd 16 03 cf 64 e5 6e 2a 66 c9 21 92 71 80 38 7b
+[  43] ch=15 rssi= -94 len=  5 ack fcs-ok seq=43 
+        02 00 2b 69 2a
+[  44] ch=15 rssi= -94 len=  5 ack fcs-ok seq=44 
+        02 00 2c d6 5e
+[  45] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=141 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=245
+        61 88 8d 20 de a7 05 00 00 48 02 a7 05 00 00 0a f5 28 fa 23 85 74 fb c5 00 ff ff 2e 21 00 00 3a 28 82 96 17 46 fd 3f a0 84 2f 99 8a b0 15 85 77 86 4e
+[  46] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=233 ackreq cmd=data-request params=c1 5a
+        63 88 e9 20 de 1f 3c 29 3c 04 c1 5a
+[  47] ch=15 rssi= -94 len= 52 data 0x976e -> 0x3c1f seq=207 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=5
+        61 88 cf 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 05 28 54 57 13 04 11 11 11 ff ff 2e 21 00 00 5d 54 be 9e d1 8a 29 b8 08 27 75 6e 52 01 8e 1c 12 dd 41 64 bf
+[  48] ch=15 rssi= -94 len=  5 ack fcs-ok seq=45 
+        02 00 2d 5f 4f
+[  49] ch=15 rssi= -94 len=  5 ack fcs-ok seq=46 
+        02 00 2e c4 7d
+[  50] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=142 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=246
+        61 88 8e 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a f6 01 00 1f 3c 28 fb 23 85 74 fb c5 00 ff ff 2e 21 00 00 e2 11 12 fd ee c8 96 fa e3 6b 46 f9 d6 58
+[  51] ch=15 rssi= -94 len= 50 data 0x0000 -> 0xfdd5 seq=143 ackreq nwkfcf=0x48 nwk 0x0000->0x928d seq=247
+        61 88 8f 20 de d5 fd 00 00 48 02 8d 92 00 00 0a f7 28 fc 23 85 74 fb c5 00 ff ff 2e 21 00 00 b7 32 bf 62 88 66 0b bb fa eb 01 45 0f c3 b8 8f a6 3a 2e
+[  52] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=144 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=248
+        61 88 90 20 de a7 05 00 00 48 02 a7 05 00 00 0a f8 28 fd 23 85 74 fb c5 00 ff ff 2e 21 00 00 c1 34 b9 fb ff 5b 64 82 ec 63 76 d3 b4 76 99 55 2b 0b 04
+[  53] ch=15 rssi= -94 len= 50 data 0x0000 -> 0xfdd5 seq=145 ackreq nwkfcf=0x48 nwk 0x0000->0x928d seq=249
+        61 88 91 20 de d5 fd 00 00 48 02 8d 92 00 00 0a f9 28 fe 23 85 74 fb c5 00 ff ff 2e 21 00 00 03 fe 9e 66 ea 4a f6 a4 06 5c 63 fa 41 f2 55 48 2c 6f e8
+[  54] ch=15 rssi= -94 len= 64 data 0x976e -> 0x3c1f seq=208 ackreq nwkfcf=0x08 nwk 0x976e->0xfffd seq=7
+        61 88 d0 20 de 1f 3c 6e 97 08 32 fd ff 6e 97 1e 07 11 11 11 ff ff 2e 21 00 28 55 57 13 04 11 11 11 ff ff 2e 21 00 00 42 fd 78 6b 58 ca dc 86 49 aa 82 24 50 0e 0a b4 ea 5c 14 da 81 d3 3b 53 55
+[  55] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=146 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=250
+        61 88 92 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a fa 01 00 1f 3c 28 ff 23 85 74 fb c5 00 ff ff 2e 21 00 00 11 e9 df 17 9d 72 4a a8 20 25 da 53 45 38 3b 95 5b 6b 89 49 6c d3 ea fd 46 0a
+[  56] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=147 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=251
+        61 88 93 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a fb 01 00 1f 3c 28 00 24 85 74 fb c5 00 ff ff 2e 21 00 00 2d 35 bf b0 f1 0f 10 86 2c 4f 92 5a 5c 89 c0 a1 97 56 d6 ba 72 d2 a3 70 17 47
+[  57] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=148 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=252
+        61 88 94 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a fc 01 00 1f 3c 28 01 24 85 74 fb c5 00 ff ff 2e 21 00 00 75 09 36 cc 2c 9d 4e fa 78 88 0d 0f 27 af c7 07 3f 9f 80 3b 7f 44 6e a6 bb 3b
+[  58] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=149 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=253
+        61 88 95 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a fd 01 00 1f 3c 28 02 24 85 74 fb c5 00 ff ff 2e 21 00 00 4c 27 d3 bf 13 eb bc f7 68 1a a5 ae 0c d6 d8 ed 47 58 6f 2a 64 ee d3 0c ca df
+[  59] ch=15 rssi= -94 len= 78 data 0x0000 -> 0xffff seq=150  nwkfcf=0x08 nwk 0x0000->0xfffc seq=254
+        41 88 96 20 de ff ff 00 00 08 02 fc ff 00 00 0a fe 28 03 24 85 74 fb c5 00 ff ff 2e 21 00 00 8a 9d 6e 3c 51 f4 08 cc 2c a1 2e fd 1a 0c bc cf 24 a7 e7 43 9b 38 8e ff 94 af ca ca 5f 15 72 51 af 08 a1 cb 92 7c 40 d3 f4 25 8f 56 e4 8f b9
+[  60] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=151  nwkfcf=0x09 nwk 0x0000->0xfffc seq=0
+        41 88 97 20 de ff ff 00 00 09 12 fc ff 00 00 0a 00 fb c5 00 ff ff 2e 21 00 28 04 24 85 74 fb c5 00 ff ff 2e 21 00 00 dc 17 31 1c fe 58 86 72 69 e5 a0 60 c4 e5 74 fe ba cc 1d 10
+[  61] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=153 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=3
+        61 88 99 20 de a7 05 00 00 48 02 a7 05 00 00 0a 03 28 06 24 85 74 fb c5 00 ff ff 2e 21 00 00 b0 09 6d 60 64 8d f5 54 53 ae c4 93 e5 ad eb 28 a9 9a ef
+[  62] ch=15 rssi= -94 len=  5 cmd ? -> ? seq=153  cmd=cmd0xf0 params=bc
+        03 00 99 f0 bc
+[  63] ch=15 rssi= -94 len= 52 data 0x0000 -> 0x3c1f seq=154 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=4
+        61 88 9a 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 04 01 00 1f 3c 28 07 24 85 74 fb c5 00 ff ff 2e 21 00 00 79 60 54 f8 55 95 98 49 3e 71 3e 45 45 b5 b7 87 34
+[  64] ch=15 rssi= -94 len= 78 data 0x0000 -> 0xffff seq=155  nwkfcf=0x08 nwk 0x0000->0xfffc seq=254
+        41 88 9b 20 de ff ff 00 00 08 02 fc ff 00 00 0a fe 28 08 24 85 74 fb c5 00 ff ff 2e 21 00 00 9f 80 77 73 6d b5 01 f1 fd ce 4a a3 62 0a b4 3e 2c 26 8b f6 03 4e 7f ba bb 75 57 20 0b b5 9f 33 40 8c c0 c1 d3 11 58 ec 23 6b 0a 65 1a 7e 40
+[  65] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=156  nwkfcf=0x09 nwk 0x0000->0xfffc seq=0
+        41 88 9c 20 de ff ff 00 00 09 12 fc ff 00 00 0a 00 fb c5 00 ff ff 2e 21 00 28 09 24 85 74 fb c5 00 ff ff 2e 21 00 00 8d 67 49 d1 0e 02 ee 3b 75 e3 eb 27 5a f7 43 f7 e9 25 b3 d0
+[  66] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=158 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=6
+        61 88 9e 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 06 01 00 1f 3c 28 0b 24 85 74 fb c5 00 ff ff 2e 21 00 00 1e 54 e6 65 df 86 3a 2a bb 5b fe f5 fd 56 8b 1e 79 4a 76 38 b5 cd 9b 2a 0e 12
+[  67] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=159  nwkfcf=0x09 nwk 0x0000->0xfffc seq=0
+        41 88 9f 20 de ff ff 00 00 09 12 fc ff 00 00 0a 00 fb c5 00 ff ff 2e 21 00 28 0c 24 85 74 fb c5 00 ff ff 2e 21 00 00 da 35 81 fe 7e 0d ad 0b 27 39 9d 50 fd 72 48 80 fc 21 c8 3d
+[  68] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=160 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=7
+        61 88 a0 20 de a7 05 00 00 48 02 a7 05 00 00 0a 07 28 0d 24 85 74 fb c5 00 ff ff 2e 21 00 00 74 33 d6 4b 66 9b 9c 71 68 2b 03 b9 a6 c6 88 10 5e d1 e5
+[  69] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=161 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=9
+        61 88 a1 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 09 01 00 1f 3c 28 0e 24 85 74 fb c5 00 ff ff 2e 21 00 00 41 01 24 9c 45 18 aa cb 4f 1f 77 1d f0 71 56 a3 9f 64 80 6d 3d 07 6a 8b 2b 9b
+[  70] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=163  nwkfcf=0x09 nwk 0x0000->0xfffc seq=0
+        41 88 a3 20 de ff ff 00 00 09 12 fc ff 00 00 0a 00 fb c5 00 ff ff 2e 21 00 28 10 24 85 74 fb c5 00 ff ff 2e 21 00 00 09 0c f6 77 61 a8 07 f1 09 09 94 71 73 ed be bb 94 df af 51
+[  71] ch=15 rssi= -94 len= 66 data 0x05a7 -> 0xffff seq=74  nwkfcf=0x08 nwk 0x4a6b->0x5ffd seq=185
+        41 88 4a 20 de ff ff a7 05 08 14 fd 5f 6b 4a 1c b9 a9 8a e1 0b 00 6a 0d 00 22 d3 c0 02 3f 4c 09 c9 fe df 57 0b 00 0e ef 09 cd 81 5d e7 2d aa 40 c1 0b 7a 2c c1 51 88 67 34 41 7e b9 f9 7d 33 fd 05 97
+[  72] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x3c1f seq=164 ackreq nwkfcf=0x08 nwk 0x0000->0x3c1f seq=10
+        61 88 a4 20 de 1f 3c 00 00 08 02 1f 3c 00 00 0a 0a 28 11 24 85 74 fb c5 00 ff ff 2e 21 00 00 14 32 45 ea 78 2d 22 e6 7d 68 76 47 5f 13 d4 e1
+[  73] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=165 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=11
+        61 88 a5 20 de a7 05 00 00 48 02 a7 05 00 00 0a 0b 28 12 24 85 74 fb c5 00 ff ff 2e 21 00 00 b5 b1 e3 b8 f1 1d a1 36 17 5b 5d 51 fc e6 b1 73 c2 c3 bb
+[  74] ch=15 rssi= -94 len= 52 data 0x976e -> 0x3c1f seq=209 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=9
+        61 88 d1 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 09 28 56 57 13 04 11 11 11 ff ff 2e 21 00 00 8f 15 74 00 1d d7 8c ba 85 0e d0 8c 0a fa 90 0e a7 43 59 b9 fa
+[  75] ch=15 rssi= -94 len=  5 ack fcs-ok seq=55 
+        02 00 37 84 f0
+[  76] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=166 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=12
+        61 88 a6 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 0c 01 00 1f 3c 28 13 24 85 74 fb c5 00 ff ff 2e 21 00 00 db 79 c7 61 ef 05 50 98 9e cb 43 00 3b f4
+[  77] ch=15 rssi= -94 len= 54 data 0x0000 -> 0x3c1f seq=167 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=13
+        61 88 a7 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 0d 01 00 1f 3c 28 14 24 85 74 fb c5 00 ff ff 2e 21 00 00 c2 47 fe 9e 40 0a 99 09 60 41 87 1a 9d c4 04 c8 05 ce cb
+[  78] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=235 ackreq cmd=data-request params=ae 51
+        63 88 eb 20 de 1f 3c 29 3c 04 ae 51
+[  79] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x3c1f seq=168 ackreq nwkfcf=0x08 nwk 0x0000->0x3c1f seq=14
+        61 88 a8 20 de 1f 3c 00 00 08 02 1f 3c 00 00 0a 0e 28 15 24 85 74 fb c5 00 ff ff 2e 21 00 00 39 74 1d 73 c4 27 14 4f cb 69 fa 92 24 8c 3d 66
+[  80] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=169 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=15
+        61 88 a9 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 0f 01 00 1f 3c 28 16 24 85 74 fb c5 00 ff ff 2e 21 00 00 c0 31 f6 7e 0a 96 9f b5 4f 20 ae 7c e4 1c ce 02 9a 88 30 b9 5a 13 1b fe 4b 21
+[  81] ch=15 rssi= -94 len= 72 data 0x976e -> 0x3c1f seq=210 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=11
+        61 88 d2 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 0b 28 57 57 13 04 11 11 11 ff ff 2e 21 00 00 2b 4f a7 b2 cd d5 2c 77 81 a0 30 41 6f 93 fe 8a 66 44 dc 8c ce 21 28 93 95 16 57 7b b2 15 32 f6 02 47 5a 0d 1b e1 93 c5 9f
+[  82] ch=15 rssi= -94 len=  5 ack fcs-ok seq=56 
+        02 00 38 73 08
+[  83] ch=15 rssi= -94 len=  5 ack fcs-ok seq=57 
+        02 00 39 fa 19
+[  84] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=171 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=17
+        61 88 ab 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 11 01 00 1f 3c 28 18 24 85 74 fb c5 00 ff ff 2e 21 00 00 f8 2a a1 28 fa 73 20 4f cf 29 7d e3 e9 43
+[  85] ch=15 rssi= -94 len= 54 data 0x0000 -> 0x3c1f seq=172 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=18
+        61 88 ac 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 12 01 00 1f 3c 28 19 24 85 74 fb c5 00 ff ff 2e 21 00 00 e9 4f 4f a8 3d 61 f7 05 51 66 5b 1d 57 88 e6 94 c6 0c b8
+[  86] ch=15 rssi= -94 len= 47 data 0x0000 -> 0x3c1f seq=173 ackreq nwkfcf=0x08 nwk 0x0000->0x3c1f seq=19
+        61 88 ad 20 de 1f 3c 00 00 08 02 1f 3c 00 00 0a 13 28 1a 24 85 74 fb c5 00 ff ff 2e 21 00 00 3e a1 ec fd c7 db f0 22 90 87 bf f7 a2 db c7 96
+[  87] ch=15 rssi= -94 len=  5 ack fcs-ok seq=58 
+        02 00 3a 61 2b
+[  88] ch=15 rssi= -94 len=  5 ack fcs-ok seq=59 
+        02 00 3b e8 3a
+[  89] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=174 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=20
+        61 88 ae 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 14 01 00 1f 3c 28 1b 24 85 74 fb c5 00 ff ff 2e 21 00 00 f9 d3 29 00 f8 86 69 6e e4 5f 10 8e 94 df
+[  90] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=175 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=21
+        61 88 af 20 de a7 05 00 00 48 02 a7 05 00 00 0a 15 28 1c 24 85 74 fb c5 00 ff ff 2e 21 00 00 d6 a6 ec 05 07 e1 87 73 c0 02 9e b1 8b 65 db d2 e7 50 d9
+[  91] ch=15 rssi= -94 len= 50 data 0x0000 -> 0xfdd5 seq=176 ackreq nwkfcf=0x48 nwk 0x0000->0x928d seq=22
+        61 88 b0 20 de d5 fd 00 00 48 02 8d 92 00 00 0a 16 28 1d 24 85 74 fb c5 00 ff ff 2e 21 00 00 ae ad 29 87 1c c0 2d 81 24 9f 3a 4a 60 2d 57 bf 26 34 0d
+[  92] ch=15 rssi= -94 len=  5 ack fcs-ok seq=60 
+        02 00 3c 57 4e
+[  93] ch=15 rssi= -94 len=  5 ack fcs-ok seq=61 
+        02 00 3d de 5f
+[  94] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=177 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=23
+        61 88 b1 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 17 01 00 1f 3c 28 1e 24 85 74 fb c5 00 ff ff 2e 21 00 00 9d 2a ee 6a 94 d5 e6 55 d9 6f 5e 55 d4 3f
+[  95] ch=15 rssi= -94 len= 52 data 0x976e -> 0x3c1f seq=213 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=14
+        61 88 d5 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 0e 28 5a 57 13 04 11 11 11 ff ff 2e 21 00 00 96 0f 3a b4 04 e3 40 c3 be 4e 71 df 2b 10 16 8e 0e 2c 20 65 d5
+[  96] ch=15 rssi= -94 len=  5 ack fcs-ok seq=62 
+        02 00 3e 45 6d
+[  97] ch=15 rssi= -94 len=  5 ack fcs-ok seq=63 
+        02 00 3f cc 7c
+[  98] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=178 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=24
+        61 88 b2 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 18 01 00 1f 3c 28 1f 24 85 74 fb c5 00 ff ff 2e 21 00 00 47 f8 b4 39 4a 09 a6 0d d9 9a 4e 1a 34 18
+[  99] ch=15 rssi= -94 len= 12 cmd 0x976e -> 0x3c1f seq=214 ackreq cmd=data-request params=df c7
+        63 88 d6 20 de 1f 3c 6e 97 04 df c7
+[ 100] ch=15 rssi= -94 len= 72 data 0x976e -> 0x3c1f seq=215 ackreq nwkfcf=0x48 nwk 0x976e->0x0000 seq=15
+        61 88 d7 20 de 1f 3c 6e 97 48 22 00 00 6e 97 1e 0f 28 5b 57 13 04 11 11 11 ff ff 2e 21 00 00 28 2d 25 8b cb 0f 40 50 1c 82 d9 c7 15 1d d5 b9 27 cd 08 22 12 30 74 77 35 00 a6 32 1b 10 79 fc 54 04 8e a3 52 78 9f d5 04
+[ 101] ch=15 rssi= -94 len=  5 ack fcs-ok seq=64 
+        02 00 40 bc f7
+[ 102] ch=15 rssi= -94 len=  5 ack fcs-ok seq=65 
+        02 00 41 35 e6
+[ 103] ch=15 rssi= -94 len= 49 data 0x0000 -> 0x3c1f seq=180 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=26
+        61 88 b4 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 1a 01 00 1f 3c 28 21 24 85 74 fb c5 00 ff ff 2e 21 00 00 04 69 f6 79 f7 70 d7 55 24 10 45 06 0f ca
+[ 104] ch=15 rssi= -94 len= 64 data 0x976e -> 0x3c1f seq=216 ackreq nwkfcf=0x08 nwk 0x976e->0xfffd seq=17
+        61 88 d8 20 de 1f 3c 6e 97 08 32 fd ff 6e 97 1e 11 11 11 11 ff ff 2e 21 00 28 5c 57 13 04 11 11 11 ff ff 2e 21 00 00 32 1c 8e 4a 12 c8 74 d6 d1 63 9b a8 67 40 dd 02 82 3b fd 70 d1 1c ef de 82
+[ 105] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=182 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=28
+        61 88 b6 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 1c 01 00 1f 3c 28 23 24 85 74 fb c5 00 ff ff 2e 21 00 00 53 aa 45 61 66 f6 03 f7 f1 bc af 7b f5 7e db 02 9a 92 f2 56 b8 45 f6 c9 39 1f
+[ 106] ch=15 rssi= -94 len= 64 data 0x0000 -> 0xffff seq=183  nwkfcf=0x08 nwk 0x976e->0xfffd seq=17
+        41 88 b7 20 de ff ff 00 00 08 12 fd ff 6e 97 1c 11 11 11 11 ff ff 2e 21 00 28 24 24 85 74 fb c5 00 ff ff 2e 21 00 00 c0 17 b8 4d f5 52 b8 8d 10 a0 72 e4 e3 9e 12 9b cd d5 05 13 06 ca bf 4b ea
+[ 107] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=236 ackreq cmd=data-request params=a0 cd
+        63 88 ec 20 de 1f 3c 29 3c 04 a0 cd
+[ 108] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=184 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=29
+        61 88 b8 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 1d 01 00 1f 3c 28 25 24 85 74 fb c5 00 ff ff 2e 21 00 00 38 cf 64 74 bc ea 26 15 2f c1 33 a3 4b ae a0 f5 f6 6f 64 a2 66 3d c7 be 6f b9
+[ 109] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=185 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=30
+        61 88 b9 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 1e 01 00 1f 3c 28 26 24 85 74 fb c5 00 ff ff 2e 21 00 00 a8 97 ff 4a 20 a3 9a 38 75 d6 80 6c 74 c5 83 56 f3 65 58 92 0a 04 bd b1 5d 88
+[ 110] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=186 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=31
+        61 88 ba 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 1f 01 00 1f 3c 28 27 24 85 74 fb c5 00 ff ff 2e 21 00 00 73 db d7 4f 0f 9a a3 ad 4a d4 5b c6 2b e5 2f 68 62 2d 4d 41 79 5e a2 c4 54 c7
+[ 111] ch=15 rssi= -94 len= 64 data 0x0000 -> 0xffff seq=187  nwkfcf=0x08 nwk 0x976e->0xfffd seq=19
+        41 88 bb 20 de ff ff 00 00 08 12 fd ff 6e 97 1c 13 11 11 11 ff ff 2e 21 00 28 28 24 85 74 fb c5 00 ff ff 2e 21 00 00 fc 04 e8 4d 0e 28 26 31 bd 14 6d 04 c5 5d e6 b3 c3 45 6d fc 11 97 84 dd 0e
+[ 112] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=188 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=32
+        61 88 bc 20 de a7 05 00 00 48 02 a7 05 00 00 0a 20 28 29 24 85 74 fb c5 00 ff ff 2e 21 00 00 e5 6a 36 59 3b 1c c4 61 cc c9 6f 19 be 39 17 17 c4 b6 d1
+[ 113] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=189 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=33
+        61 88 bd 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 21 01 00 1f 3c 28 2a 24 85 74 fb c5 00 ff ff 2e 21 00 00 cd 0a 0a 87 c0 df bb e1 9c 9c c9 37 2c 97 62 70 7d 0d 6a 98 8c 0f cf de be be
+[ 114] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=191 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=35
+        61 88 bf 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 23 01 00 1f 3c 28 2c 24 85 74 fb c5 00 ff ff 2e 21 00 00 dc 4a a0 b5 46 d1 05 d7 5a 63 21 56 95 d7 4e a7 74 ee 79 32 d9 64 fe 7c ca 83
+[ 115] ch=15 rssi= -94 len=  5 ack fcs-ok seq=192 
+        02 00 c0 b4 73
+[ 116] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=193 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=37
+        61 88 c1 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 25 01 00 1f 3c 28 2e 24 85 74 fb c5 00 ff ff 2e 21 00 00 1e 9b c8 e5 57 b8 33 78 d4 93 f7 b2 9a 2a 6a 2c c1 99 91 05 fc 96 20 42 71 04
+[ 117] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=193 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=37
+        61 88 c1 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 25 01 00 1f 3c 28 2e 24 85 74 fb c5 00 ff ff 2e 21 00 00 1e 9b c8 e5 57 b8 33 78 d4 93 f7 b2 9a 2a 6a 2c c1 99 91 05 fc 96 20 42 71 04
+[ 118] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=194 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=38
+        61 88 c2 20 de a7 05 00 00 48 02 a7 05 00 00 0a 26 28 2f 24 85 74 fb c5 00 ff ff 2e 21 00 00 1f 24 1a ae 58 10 ab 97 7d 9e 6c a0 90 48 f5 1d 85 d2 3d
+  !! too short for FCF: 02
+[ 120] ch=15 rssi= -94 len=  5 ack fcs-ok seq=248 
+        02 00 f8 7f ce
+[ 121] ch=15 rssi= -94 len=  5 ack fcs-ok seq=249 
+        02 00 f9 f6 df
+[ 122] ch=15 rssi= -94 len=  5 ack fcs-ok seq=250 
+        02 00 fa 6d ed
+[ 123] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=195 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=39
+        61 88 c3 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 27 01 00 1f 3c 28 30 24 85 74 fb c5 00 ff ff 2e 21 00 00 32 35 b9 34 1d da c7 51 ad 1a be 22 65 14 5b 08 d8 e1 f0 c6 66 a4 03 ef 73 6c
+[ 124] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=196  nwkfcf=0x09 nwk 0x0000->0xfffc seq=41
+        41 88 c4 20 de ff ff 00 00 09 12 fc ff 00 00 0a 29 fb c5 00 ff ff 2e 21 00 28 31 24 85 74 fb c5 00 ff ff 2e 21 00 00 af f6 88 60 03 4a 9d 80 4d bc 36 4f a9 79 83 e5 c1 71 23 07
+[ 125] ch=15 rssi= -94 len= 64 data 0x0000 -> 0xffff seq=197  nwkfcf=0x08 nwk 0x4a6b->0xfffd seq=182
+        41 88 c5 20 de ff ff 00 00 08 12 fd ff 6b 4a 1c b6 a9 8a ec 0b 00 6f 0d 00 28 32 24 85 74 fb c5 00 ff ff 2e 21 00 00 9e fe fa 51 45 64 23 ca 45 6a e5 54 4d 52 ba 94 69 d0 f9 ce d3 1c 0f ae 58
+[ 126] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=198 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=44
+        61 88 c6 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 2c 01 00 1f 3c 28 33 24 85 74 fb c5 00 ff ff 2e 21 00 00 ef 69 8d fb 18 5a b9 ca 20 c7 d2 45 c9 c3 42 10 c2 5b 94 07 f1 1c 75 9f b4 b8
+[ 127] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=237 ackreq cmd=data-request params=1f 4c
+        63 88 ed 20 de 1f 3c 29 3c 04 1f 4c
+[ 128] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=200  nwkfcf=0x09 nwk 0x0000->0xfffc seq=41
+        41 88 c8 20 de ff ff 00 00 09 12 fc ff 00 00 0a 29 fb c5 00 ff ff 2e 21 00 28 35 24 85 74 fb c5 00 ff ff 2e 21 00 00 1c c0 9b 58 dd fc 34 f9 73 60 25 0e 95 6d bc 33 09 e5 53 8b
+[ 129] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=201  nwkfcf=0x09 nwk 0x0000->0xfffc seq=41
+        41 88 c9 20 de ff ff 00 00 09 12 fc ff 00 00 0a 29 fb c5 00 ff ff 2e 21 00 28 36 24 85 74 fb c5 00 ff ff 2e 21 00 00 0a 12 18 12 11 13 af f4 ee 11 e3 d4 fa ba 6a c3 a1 5e 00 8a
+[ 130] ch=15 rssi= -94 len= 64 data 0x0587 -> 0xffff seq=82 pending nwkfcf=0x08 nwk 0x4a6b->0xfffd seq=182
+        51 88 52 20 8e ff ff 87 05 08 1b fd ff 6b 4a 1c b6 a9 8a 4c 01 00 2f 0d 00 28 bb ce 02 00 8c 0f c3 fe ff c7 01 00 00 f2 82 d7 74 b4 b9 2f 0a 3d 70 f3 ac ac 10 dc e9 60 4e 61 55 a5 37 3d 86 90
+[ 131] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=203 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=46
+        61 88 cb 20 de a7 05 00 00 48 02 a7 05 00 00 0a 2e 28 38 24 85 74 fb c5 00 ff ff 2e 21 00 00 28 2e a2 e9 a3 00 aa 60 eb 17 d1 99 32 75 c3 95 0d c7 0d
+[ 132] ch=15 rssi= -94 len= 61 data 0x0000 -> 0x3c1f seq=204 ackreq nwkfcf=0x48 nwk 0x0000->0x976e seq=47
+        61 88 cc 20 de 1f 3c 00 00 48 06 6e 97 00 00 0a 2f 01 00 1f 3c 28 39 24 85 74 fb c5 00 ff ff 2e 21 00 00 1a 5b d0 95 fa fb bc f6 15 e9 5d 89 d6 d7 21 54 10 08 da 49 e2 e1 d3 1c 86 a3
+[ 133] ch=15 rssi= -94 len= 50 data 0x0000 -> 0xfdd5 seq=205 ackreq nwkfcf=0x48 nwk 0x0000->0x928d seq=48
+        61 88 cd 20 de d5 fd 00 00 48 02 8d 92 00 00 0a 30 28 3a 24 85 74 fb c5 00 ff ff 2e 21 00 00 3e e4 2d f8 21 9e ca 46 7d d3 2b 60 d6 9b c7 1a 19 bf 8e
+[ 134] ch=15 rssi= -94 len= 65 data 0x0000 -> 0xffff seq=206  nwkfcf=0x09 nwk 0x0000->0xfffc seq=49
+        41 88 ce 20 de ff ff 00 00 09 12 fc ff 00 00 01 31 fb c5 00 ff ff 2e 21 00 28 3b 24 85 74 fb c5 00 ff ff 2e 21 00 00 d6 f5 95 31 5e 90 c5 e3 7b c5 37 ab d5 e5 9a 22 c7 ac 9b 7e 33 95 8d c7 83 c5
+[ 135] ch=15 rssi= -94 len= 50 data 0x0000 -> 0xfdd5 seq=207 ackreq nwkfcf=0x48 nwk 0x0000->0x928d seq=50
+        61 88 cf 20 de d5 fd 00 00 48 02 8d 92 00 00 0a 32 28 3c 24 85 74 fb c5 00 ff ff 2e 21 00 00 ff 12 82 56 33 59 54 24 c6 6b 40 36 51 7b c5 b9 09 55 5a
+[ 136] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=238 ackreq cmd=data-request params=cf c6
+        63 88 ee 20 de 1f 3c 29 3c 04 cf c6
+[ 137] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=209 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=52
+        61 88 d1 20 de a7 05 00 00 48 02 a7 05 00 00 0a 34 28 3e 24 85 74 fb c5 00 ff ff 2e 21 00 00 82 95 61 fd c7 fb a6 13 d0 e3 46 27 ce 85 c4 34 90 51 be
+[ 138] ch=15 rssi= -94 len= 51 data 0x0000 -> 0x3c1f seq=210 ackreq nwkfcf=0x48 nwk 0x0000->0x80ee seq=53
+        61 88 d2 20 de 1f 3c 00 00 48 06 ee 80 00 00 0a 35 01 00 1f 3c 28 3f 24 85 74 fb c5 00 ff ff 2e 21 00 00 a6 b2 97 c6 85 08 a1 a3 38 14 f0 38 c9 94 b0 39
+[ 139] ch=15 rssi= -94 len= 51 data 0x0000 -> 0x3c1f seq=210 ackreq nwkfcf=0x48 nwk 0x0000->0x80ee seq=53
+        61 88 d2 20 de 1f 3c 00 00 48 06 ee 80 00 00 0a 35 01 00 1f 3c 28 3f 24 85 74 fb c5 00 ff ff 2e 21 00 00 a6 b2 97 c6 85 08 a1 a3 38 14 f0 38 c9 94 b0 39
+[ 140] ch=15 rssi= -94 len=  5 ack fcs-ok seq=211 
+        02 00 d3 ae 51
+[ 141] ch=15 rssi= -94 len= 51 data 0x0000 -> 0x3c1f seq=212 ackreq nwkfcf=0x48 nwk 0x0000->0x80ee seq=55
+        61 88 d4 20 de 1f 3c 00 00 48 06 ee 80 00 00 0a 37 01 00 1f 3c 28 41 24 85 74 fb c5 00 ff ff 2e 21 00 00 12 30 1f df 30 4c de 32 6d 7a 08 73 c5 3a 45 d8
+[ 142] ch=15 rssi= -94 len= 50 data 0x0000 -> 0x05a7 seq=214 ackreq nwkfcf=0x48 nwk 0x0000->0x05a7 seq=57
+        61 88 d6 20 de a7 05 00 00 48 02 a7 05 00 00 0a 39 28 43 24 85 74 fb c5 00 ff ff 2e 21 00 00 96 68 62 35 1e 8c c6 6b e7 99 40 98 4a 96 2d 61 8c b2 f0
+[ 143] ch=15 rssi= -94 len= 12 cmd 0x3c29 -> 0x3c1f seq=239 ackreq cmd=data-request params=70 47
+        63 88 ef 20 de 1f 3c 29 3c 04 70 47
+[ 144] ch=15 rssi= -94 len= 51 data 0x0000 -> 0x3c1f seq=215 ackreq nwkfcf=0x48 nwk 0x0000->0x80ee seq=58
+        61 88 d7 20 de 1f 3c 00 00 48 06 ee 80 00 00 0a 3a 01 00 1f 3c 28 44 24 85 74 fb c5 00 ff ff 2e 21 00 00 f4 d2 07 4f ee 1e 76 86 78 0e 8a fb 73 d3 0c fa
+[ 145] ch=15 rssi= -82 len= 59 data 0x0000 -> 0xffff seq=217  nwkfcf=0x09 nwk 0x0000->0xfffc seq=61
+        41 88 d9 20 de ff ff 00 00 09 12 fc ff 00 00 0a 3d fb c5 00 ff ff 2e 21 00 28 46 24 85 74 fb c5 00 ff ff 2e 21 00 00 21 b3 df bb 76 b1 18 39 a6 bc 22 d4 24 50 7d 84 12 75 34 ce
+[ 146] ch=15 rssi= -94 len= 64 data 0x0000 -> 0xffff seq=218  nwkfcf=0x08 nwk 0x4a6b->0xfffd seq=183
+        41 88 da 20 de ff ff 00 00 08 12 fd ff 6b 4a 1c b7 a9 8a ec 0b 00 6f 0d 00 28 47 24 85 74 fb c5 00 ff ff 2e 21 00 00 4b 67 24 f3 95 b7 9b 8a ce ec d8 0d 5f 57 06 b3 b4 cf dc 1e c2 fc d6 20 10
+[ 147] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=220  nwkfcf=0x09 nwk 0x0000->0xfffc seq=61
+        41 88 dc 20 de ff ff 00 00 09 12 fc ff 00 00 0a 3d fb c5 00 ff ff 2e 21 00 28 49 24 85 74 fb c5 00 ff ff 2e 21 00 00 a0 79 af 5d a8 f9 da 4d 2e d5 e0 95 ad 05 71 a0 32 fb 50 72
+[ 148] ch=15 rssi= -94 len= 59 data 0x0000 -> 0xffff seq=221  nwkfcf=0x09 nwk 0x0000->0xfffc seq=61
+        41 88 dd 20 de ff ff 00 00 09 12 fc ff 00 00 0a 3d fb c5 00 ff ff 2e 21 00 28 4a 24 85 74 fb c5 00 ff ff 2e 21 00 00 49 5c 4c c0 99 23 ca d4 16 06 e8 42 d3 4a 9e 85 9c 64 b1 23
+
+=== summary ===
+frame classes: {'status': 1, 'spinel': 10, 'data': 102, 'cmd': 11, 'bad': 2, 'ack': 22}
+PAN ids seen: {'0xde20': 111, '0x8e20': 1}
+     src frames          rssi  resolved EUI-64 / peers
+0x000000     90   -94..-82     00:21:2e:ff:ff:00:c5:fb   0x3c1f×38, 0xffff×25, 0x05a7×17, 0xfdd5×10
+0x003c29      9   -94..-94     -                         0x3c1f×9
+0x00976e      9   -94..-94     00:21:2e:ff:ff:11:11:11   0x3c1f×9
+0x0005a7      3   -94..-94     -                         0xfc1f×1, 0xfff5×1, 0xffff×1
+0x000587      1   -94..-94     -                         0xffff×1

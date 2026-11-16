@@ -1,0 +1,35 @@
+# third-party reference checkouts and the standards, read locally and never published
+refs/
+
+# Python (harness tooling)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C build artifacts
+build/
+out/
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.exe
+compile_commands.json
+
+# scratch: audits, notes and throwaway work that is not part of the tree
+tmp/
+
+# the history and run records removed from the public docs (D-245)
+docs/tmp/
+
+# maintainers' bench, ports and local tool paths, read by agents after AGENTS.md (D-245)
+AGENTS.local.md
+
+# editor / OS noise
+.DS_Store
+*.swp
+.tags
+
+# the run log, kept beside the tree and not published
+docs/bench-log.md
