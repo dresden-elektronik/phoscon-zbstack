@@ -120,6 +120,7 @@ A response is the application's: one that asks another device from endpoint 0 ge
 | `ZB_EVENT_STOPPED` | | the RCP was reset and the port closed, after `Zb_StackStop` or an energy scan |
 | `ZB_EVENT_ENERGY_SCAN` | `status`, `energy`: per channel asked, lowest first, the channel, `dbm` and `measured` | a `Zb_StackEnergyScan` ended (§3); `ZB_ERR_UNSUPPORTED` on a radio that has no energy scan |
 | `ZB_EVENT_POLLED` | `status` | a `Zb_StackPoll` ended: `ZB_OK` when the parent sent a frame, `ZB_ERR_NO_DATA` when it held none, or why the poll failed (§8) |
+| `ZB_EVENT_CHILD_POLL` | `childPoll`: network address, extended address and `ieeeKnown`, `framePending` | an end device child polled this coordinator or router, so it listens now; `framePending` 1 when a frame was held for it and goes out as the answer. One per poll, and none from a device that is not a child (§8, D-303) |
 | `ZB_EVENT_DEVICE_LEFT` | `left`: network address, extended address, `rejoin`, `reported` | another device left: its leave command was heard, `rejoin` 1 when it said it comes back with its key; or `reported` 1, its parent's Device Left, which R23.1 makes informative, so no key is dropped on it; the two may both tell one departure |
 | `ZB_EVENT_ADDRESS` | `address`: network address, extended address, `reason` | the address map learned a device (`ZB_ADDRESS_LEARNED`), found it at another network address (`ZB_ADDRESS_CHANGED`), or heard a second device claim one (`ZB_ADDRESS_CONFLICT`, the map keeping the first) (D-296) |
 | `ZB_EVENT_ROUTE` | `route`: destination, `reason`, the relays, `relays[0]` next to the destination | a route record or a network status 0x0b changed a source route: `ZB_ROUTE_LEARNED`, `ZB_ROUTE_CHANGED`, or gone as `ZB_ROUTE_DIRECT` or `ZB_ROUTE_FAILED` (§8, D-295) |
@@ -198,6 +199,7 @@ A device's announcement does not arrive as `ZB_EVENT_DATA`: the stack reads it a
 
 `Zb_StackPermitJoining(&zb, seconds)` opens joining again once the network is up, and 0 closes it.
 A sleepy end device asks its parent for what it holds with `Zb_StackPoll(&zb)` beside its own schedule, and `ZB_EVENT_POLLED` follows; `Zb_StackSetPollInterval(&zb, ms)` changes the schedule, shorter while it expects answers and back to 0, the default, after.
+Its parent sees each of those polls as `ZB_EVENT_CHILD_POLL`, which is when a frame sent to a sleeper is taken soonest.
 `Zb_StackStop(&zb)` resets the RCP and closes the port, and `ZB_EVENT_STOPPED` follows.
 
 A device keeps its network across restarts with `Zb_StackCapture(&zb, 1, &state)` once it is up, and `state` handed back as `cfg.state` at the next start.

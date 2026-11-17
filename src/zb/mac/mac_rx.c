@@ -1,5 +1,6 @@
 #include "mac.h"
 
+#include "mac_indirect.h"
 #include "mac_rx.h"
 
 #include "log.h"
@@ -195,8 +196,9 @@ static void macQueuePollArrival(Mac_PollEvents *polls, const Mac_PollArrival *ar
 }
 
 /* One Data Request reported: the step's own list learns of it in arrival order and the event ring receives it
-   under the full-pool policy `macQueuePollArrival` states. */
-static void macRecordPoll(Mac_Rx *rx, Mac_PollEvents *polls, const Radio_Frame *frame, const Mac_Frame *header)
+   under the full-pool policy `macQueuePollArrival` states, with whether the queue held something for it then. */
+static void macRecordPoll(Mac_Rx *rx, Mac_PollEvents *polls, const Mac_Indirect *indirect, const Radio_Frame *frame,
+                          const Mac_Frame *header)
 {
     Mac_PollArrival arrival;
 
@@ -207,6 +209,7 @@ static void macRecordPoll(Mac_Rx *rx, Mac_PollEvents *polls, const Radio_Frame *
     arrival.extendedAddress = header->srcExtended;
     arrival.dsn = header->seq;
     arrival.stampTicks = frame->deviceStampTicks;
+    arrival.framePending = MacIndirect_QueuedFor(indirect, &arrival) != 0;
 
     rx->stepPolls[rx->stepPollCount] = arrival;
     rx->stepPollCount++;
@@ -440,7 +443,7 @@ static int macClassifyOrdinary(Mac_Rx *rx, const Radio_Frame *frame, const Radio
     slot->status = frame->error;
 
     if (macPollFromDevice(header, payload, payloadLen))
-        macRecordPoll(rx, polls, frame, header);
+        macRecordPoll(rx, polls, &mac->indirect, frame, header);
 
     return 1;
 }

@@ -63,6 +63,9 @@ ZbStatus MacIndirect_Request(Mac_Indirect *indirect, const Mac_DataRequestParame
                              int ownExtendedKnown, uint64_t ownExtended, Radio_Radio *radio, uint32_t *dsn,
                              uint32_t *refusedRequests, uint32_t nowMs);
 
+/* Everything the queue holds for the device a poll came from, attempt outstanding or not. */
+uint32_t MacIndirect_QueuedFor(const Mac_Indirect *indirect, const Mac_PollArrival *poll);
+
 /* One detected poll answered from the queue: the oldest transaction held for that device, or 10.22.3's empty
    answer, issued from the caller's track pool and MPDU scratch. */
 ZbStatus MacIndirect_DoPollAnswer(Mac_Indirect *indirect, const Mac_PollArrival *poll, Mac_Tx *tx,

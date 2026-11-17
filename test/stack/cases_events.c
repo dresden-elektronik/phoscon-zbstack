@@ -33,6 +33,9 @@ typedef struct StackSide
     Radio_Handle seen;
     Zb_StackEvent log[STACK_LOG_MAX];
     uint32_t logged;
+    Zb_StackEvent childPoll;        /* the last ZB_EVENT_CHILD_POLL, which every poll repeats and the log leaves out */
+    uint32_t childPolls;
+    uint32_t childPollsPending;
 } StackSide;
 
 /* Two stacks, which a static keeps off the case's own frame: each holds a whole library. */
@@ -147,7 +150,13 @@ static void stackTurn(StackSide *side, uint32_t nowMs)
 
     while (Zb_StackPollEvent(&side->stack, &event))
     {
-        if (side->logged < STACK_LOG_MAX)
+        if (event.type == ZB_EVENT_CHILD_POLL)
+        {
+            side->childPoll = event;
+            side->childPolls++;
+            side->childPollsPending += event.childPoll.framePending != 0;
+        }
+        else if (side->logged < STACK_LOG_MAX)
             side->log[side->logged++] = event;
     }
 }
@@ -574,6 +583,58 @@ void caseStackSleepyEndDeviceJoinsAndTheyTalk(void)
     polled = stackFirst(&endDevice, ZB_EVENT_POLLED);
     Test_ExpectStatus(polled ? polled->status : ZB_ERR_INTERNAL, ZB_ERR_NO_DATA, "and hears the parent held nothing");
     Test_ExpectStatus(Zb_StackPoll(&s_coordinator.stack), ZB_ERR_BAD_STATE, "a coordinator has no parent to poll");
+}
+
+/* A sleepy child's Data Requests told to its parent's application, one event per poll, with the child's addresses:
+   nothing held for the polls it makes on its own schedule, and the frame held for it on the poll that takes it. */
+void caseStackChildPollsAreTold(void)
+{
+    static StackSide endDevice;
+    const Zb_StackEvent *up;
+    const Zb_StackEvent *sent;
+    Aps_ApsdeReq request;
+    uint8_t asdu[3] = { 0x01, 0x30, 0x02 };
+    uint32_t pollsBefore;
+    uint32_t nowMs;
+
+    Test_Case("caseStackChildPollsAreTold");
+
+    stackCoordinator(&s_coordinator);
+    stackEndDevice(&endDevice);
+    endDevice.cfg.sleepy = 1;
+
+    Test_ExpectStatus(Zb_StackStart(&s_coordinator.stack, &s_coordinator.cfg), ZB_OK, "the coordinator starts");
+    Test_ExpectStatus(Zb_StackStart(&endDevice.stack, &endDevice.cfg), ZB_OK, "and a sleepy end device");
+
+    nowMs = stackRunUntil(&s_coordinator, &endDevice, &endDevice, ZB_EVENT_NETWORK_UP, 100, 60000);
+    nowMs = stackRunUntil(&s_coordinator, &endDevice, &s_coordinator, ZB_EVENT_DEVICE_JOINED, nowMs, nowMs + 5000);
+    nowMs = stackRunFor(&s_coordinator, &endDevice, nowMs, 2000);
+    up = stackFirst(&endDevice, ZB_EVENT_NETWORK_UP);
+    Test_Expect(up != 0 && s_coordinator.childPolls != 0, "the child is up, and its parent was told of its polls");
+
+    s_coordinator.childPolls = 0;
+    s_coordinator.childPollsPending = 0;
+    pollsBefore = Nwk_PollsSent(Zb_CoreNwk(Zb_StackCore(&endDevice.stack)));
+    nowMs = stackRunFor(&s_coordinator, &endDevice, nowMs, 30000);
+
+    Test_ExpectCount(s_coordinator.childPolls, Nwk_PollsSent(Zb_CoreNwk(Zb_StackCore(&endDevice.stack))) - pollsBefore,
+                     "one event for each Data Request the child sent at its own rate");
+    Test_Expect(s_coordinator.childPolls != 0 && s_coordinator.childPoll.childPoll.networkAddress
+                                                     == (up != 0 ? up->network.networkAddress : 0xffff),
+                "naming the child by its network address");
+    Test_Expect(s_coordinator.childPoll.childPoll.ieeeKnown
+                    && s_coordinator.childPoll.childPoll.ieee == STACK_END_DEVICE_IEEE,
+                "and by the extended address its association gave the parent");
+    Test_ExpectCount(s_coordinator.childPollsPending, 0, "the parent held nothing for any of them");
+
+    request = stackRequest(up != 0 ? up->network.networkAddress : 0xffff, asdu, (uint32_t)sizeof asdu, 0x0e13);
+    Test_ExpectStatus(Zb_StackApsRequest(&s_coordinator.stack, &request), ZB_OK, "the coordinator sends to the child");
+    nowMs = stackRunUntil(&s_coordinator, &endDevice, &s_coordinator, ZB_EVENT_SENT, nowMs, nowMs + 20000);
+    sent = stackFirst(&s_coordinator, ZB_EVENT_SENT);
+    Test_ExpectStatus(sent ? sent->status : ZB_ERR_INTERNAL, ZB_OK, "held for the child's poll and acknowledged");
+    Test_Expect(s_coordinator.childPollsPending != 0, "and the poll that took it was told with a frame pending");
+    Test_ExpectCount(Nwk_ChildPollNoticesDropped(Zb_CoreNwk(Zb_StackCore(&s_coordinator.stack))), 0,
+                     "an application that reads its events loses none");
 }
 
 /* A parent that has forgotten its child, as one that aged it out or restarted has: the child's next marked frame is

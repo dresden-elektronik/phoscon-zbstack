@@ -1163,7 +1163,7 @@
     "executable": "spinel_session"
   },
   "stack": {
-    "assertions": 336,
+    "assertions": 347,
     "caseOrder": [
       "caseStackVersionStringIsItsNumbers",
       "caseStackStartRefusesWhatItCannotStartFrom",
@@ -1172,6 +1172,7 @@
       "caseStackRouterJoinsAndTheyTalk",
       "caseStackEndDeviceJoinsAndTheyTalk",
       "caseStackSleepyEndDeviceJoinsAndTheyTalk",
+      "caseStackChildPollsAreTold",
       "caseStackSleepyEndDeviceRestoresAndRejoins",
       "caseStackForgottenEndDeviceRejoins",
       "caseStackParallelSendsComeBackByTag",
@@ -1199,7 +1200,7 @@
       "caseStackJoinerKeepsItsJoinedKey",
       "caseStackJoinerGivesUpOnASilentTrustCentre"
     ],
-    "cases": 33,
+    "cases": 34,
     "executable": "stack_contract"
   },
   "state": {

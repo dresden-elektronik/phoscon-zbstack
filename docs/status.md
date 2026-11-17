@@ -26,6 +26,7 @@ Two RCPs with no route between them discover one and carry an acknowledged frame
 Six RCPs made to hear only their two sides route across five hops.
 An end device with its receiver on reaches every router of that line through its parent, and each answers it.
 A sleepy end device joins, takes its link key and is interviewed through its polls, on loopback radios and on an ESP32-C6 development board running Phoscon RCP under a ConBee II parent.
+Its parent's application is told of each of its polls, so a frame for a sleeper is sent while it listens.
 A capture of a test network replays through all four layers with no RCP attached.
 An application registers its endpoint, the device object answers and asks discovery, and the Basic cluster answers a read.
 

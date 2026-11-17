@@ -24,10 +24,11 @@ Every id, its title and where it stands.
 | D-26 | Enforcing one session per port | Open |
 | D-111 | 3.6.1.10.5's 0x0e verification is not built | Open |
 
-### Settled: the archive the code cites (218)
+### Settled: the archive the code cites (219)
 
 | id | title | status |
 | --- | --- | --- |
+| D-303 | A parent tells its application of each poll from an end device child | Decided |
 | D-302 | The Windows port waits on its COM port through COMMTIMEOUTS, with no overlapped I/O | Decided |
 | D-301 | `Zb_Stack` offers a sleepy end device, which polls at 250 ms while it attaches and 7.5 s after | Decided |
 | D-300 | A device whose receiver rests hears only its poll's window, even on a radio that never sleeps | Decided |
@@ -248,6 +249,16 @@ Every id, its title and where it stands.
 | D-1 | Build and test scaffolding | Decided |
 
 ## Entries
+
+## D-303 · A parent tells its application of each poll from an end device child
+
+**Status:** Decided · **tags:** api, decision
+
+**Decided: each MLME-POLL.indication (R23.1 D.10.2) from an end device the neighbour table holds as a child becomes `ZB_EVENT_CHILD_POLL`, with its network address, its IEEE address where known, and whether the MAC held a frame for it as the poll arrived.**
+No NLME primitive carries a poll upwards, so the event is this stack's own.
+A sleeper listens only after its poll, so an application that has something for it sends on the poll, not on its next report.
+A poll from a device the table does not hold is answered with a leave and told nothing.
+The ring is 8 deep and counts what it drops; the stack does not rate-limit.
 
 ## D-302 · The Windows port waits on its COM port through COMMTIMEOUTS, with no overlapped I/O
 

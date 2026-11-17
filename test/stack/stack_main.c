@@ -10,6 +10,7 @@ void caseStackCoordinatorWithoutEntropyNamesItsKey(void);
 void caseStackRouterJoinsAndTheyTalk(void);
 void caseStackEndDeviceJoinsAndTheyTalk(void);
 void caseStackSleepyEndDeviceJoinsAndTheyTalk(void);
+void caseStackChildPollsAreTold(void);
 void caseStackSleepyEndDeviceRestoresAndRejoins(void);
 void caseStackForgottenEndDeviceRejoins(void);
 void caseStackParallelSendsComeBackByTag(void);
@@ -53,6 +54,7 @@ int main(void)
     caseStackRouterJoinsAndTheyTalk();
     caseStackEndDeviceJoinsAndTheyTalk();
     caseStackSleepyEndDeviceJoinsAndTheyTalk();
+    caseStackChildPollsAreTold();
     caseStackSleepyEndDeviceRestoresAndRejoins();
     caseStackForgottenEndDeviceRejoins();
     caseStackParallelSendsComeBackByTag();

@@ -379,8 +379,28 @@ static void nwkDoChildTimeout(Nwk_Nwk *self, uint32_t nowMs)
     }
 }
 
-/* The two answers to a poll: a known end device's counter restarts, and a device polling with no entry, by a short
-   address it can be sent to, is held a leave request, one at a time. */
+/* One child's poll for the higher layer; a full ring counts what it lost. */
+static void nwkDoChildPollNotice(Nwk_Nwk *self, const Nwk_NeighborTableEntry *entry, const Mac_PollArrival *poll)
+{
+    Nwk_ChildPollNotice *notice;
+
+    if (self->childPollNoticeCount >= NWK_CHILD_POLL_NOTICE_MAX)
+    {
+        self->childPollNoticesDropped++;
+        return;
+    }
+
+    notice = &self->childPollNotices[(self->childPollNoticeHead + self->childPollNoticeCount)
+                                     % NWK_CHILD_POLL_NOTICE_MAX];
+    notice->networkAddress = entry->networkAddress;
+    notice->extendedAddress = entry->ieeeKnown ? entry->extendedAddress : 0;
+    notice->ieeeKnown = entry->ieeeKnown;
+    notice->framePending = poll->framePending;
+    self->childPollNoticeCount++;
+}
+
+/* The two answers to a poll: a known end device's counter restarts and the higher layer is told it is awake, and a
+   device polling with no entry, by a short address it can be sent to, is held a leave request, one at a time. */
 static void nwkDoPolls(Nwk_Nwk *self, uint32_t nowMs)
 {
     Nwk_NeighborTableEntry *entry;
@@ -416,6 +436,7 @@ static void nwkDoPolls(Nwk_Nwk *self, uint32_t nowMs)
                 Nwk_TimeoutRestart(entry, nowMs);
                 entry->keepaliveReceived = 1;
                 self->keepalivesReceived++;
+                nwkDoChildPollNotice(self, entry, poll);
             }
 
             continue;
@@ -3485,6 +3506,32 @@ uint32_t Nwk_AddressNoticesDropped(const Nwk_Nwk *self)
         return 0;
 
     return self->addressNoticesDropped;
+}
+
+uint32_t Nwk_PollChildPollNotices(Nwk_Nwk *self, Nwk_ChildPollNotice *out, uint32_t max)
+{
+    uint32_t taken = 0;
+
+    if (self == 0 || out == 0)
+        return 0;
+
+    while (taken < max && self->childPollNoticeCount > 0)
+    {
+        out[taken++] = self->childPollNotices[self->childPollNoticeHead];
+
+        self->childPollNoticeHead = (self->childPollNoticeHead + 1) % NWK_CHILD_POLL_NOTICE_MAX;
+        self->childPollNoticeCount--;
+    }
+
+    return taken;
+}
+
+uint32_t Nwk_ChildPollNoticesDropped(const Nwk_Nwk *self)
+{
+    if (self == 0)
+        return 0;
+
+    return self->childPollNoticesDropped;
 }
 
 uint32_t Nwk_PollSourceRouteNotices(Nwk_Nwk *self, Nwk_SourceRouteNotice *out, uint32_t max)

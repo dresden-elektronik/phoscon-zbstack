@@ -278,7 +278,7 @@ static uint32_t macTransactionsRemaining(const Mac_Indirect *indirect, const Mac
 }
 
 /* Everything the queue holds for that device, attempt outstanding or not: what a poll found something for. */
-static uint32_t macTransactionsQueuedFor(const Mac_Indirect *indirect, const Mac_PollArrival *poll)
+uint32_t MacIndirect_QueuedFor(const Mac_Indirect *indirect, const Mac_PollArrival *poll)
 {
     uint32_t i;
     uint32_t count = 0;
@@ -369,7 +369,7 @@ ZbStatus MacIndirect_DoPollAnswer(Mac_Indirect *indirect, const Mac_PollArrival 
         return ZB_OK;
     }
 
-    if (macTransactionsQueuedFor(indirect, poll) != 0)
+    if (MacIndirect_QueuedFor(indirect, poll) != 0)
     {
         indirect->pollsUnanswered++;
         return ZB_OK;

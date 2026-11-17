@@ -45,8 +45,9 @@ typedef enum Zb_StackEventType
     ZB_EVENT_ADDRESS = 11,          /* the address map learned or changed a device's network address: `address` */
     ZB_EVENT_ENERGY_SCAN = 12,      /* a Zb_StackEnergyScan ended: `energy`, or ZB_ERR_UNSUPPORTED on a radio that
                                        measures nothing; ZB_EVENT_STOPPED follows */
-    ZB_EVENT_POLLED = 13            /* a Zb_StackPoll ended: `status` ZB_OK when the parent sent a frame, ZB_ERR_NO_DATA
+    ZB_EVENT_POLLED = 13,           /* a Zb_StackPoll ended: `status` ZB_OK when the parent sent a frame, ZB_ERR_NO_DATA
                                        when it held none, or why the poll failed */
+    ZB_EVENT_CHILD_POLL = 14        /* an end device child of this node polled it, so it listens now: `childPoll` */
 } Zb_StackEventType;
 
 /* Why the address map told a pair. A conflict is a network address a second extended address claimed; the map keeps
@@ -109,6 +110,16 @@ typedef struct Zb_StackLeft
     int reported;
 } Zb_StackLeft;
 
+/* A child's MAC Data Request. `ieee` is 0 unless `ieeeKnown`; `framePending` 1: a frame was held for the child as
+   the poll arrived, and goes out as its answer. One event per poll, none for a device this node does not hold. */
+typedef struct Zb_StackChildPoll
+{
+    uint16_t networkAddress;
+    uint64_t ieee;
+    int ieeeKnown;
+    int framePending;
+} Zb_StackChildPoll;
+
 /* One channel an energy scan measured: its peak in the radio's dBm, or `measured` 0 and no level when nothing was. */
 typedef struct Zb_StackEnergyLevel
 {
@@ -136,6 +147,7 @@ typedef struct Zb_StackEvent
     Zb_StackLeft left;
     Zb_StackAddress address;
     Zb_StackEnergy energy;
+    Zb_StackChildPoll childPoll;
 } Zb_StackEvent;
 
 /* What the application states once. Zb_StackCoordinatorDefaults, Zb_StackRouterDefaults and Zb_StackEndDeviceDefaults fill it; an

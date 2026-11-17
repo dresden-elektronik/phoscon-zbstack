@@ -426,6 +426,21 @@ typedef struct Nwk_AddressNotice
     uint32_t reason;
 } Nwk_AddressNotice;
 
+enum
+{
+    NWK_CHILD_POLL_NOTICE_MAX = 8   /* the child poll notice ring's depth, this stack's own */
+};
+
+/* A Data Request from an end device this router holds as a child: the child is awake and listening now, which an
+   application waiting to reach a sleeper acts on. `framePending` is the MAC's: a frame was held for it. */
+typedef struct Nwk_ChildPollNotice
+{
+    uint64_t extendedAddress;
+    uint16_t networkAddress;
+    int ieeeKnown;
+    int framePending;
+} Nwk_ChildPollNotice;
+
 /* The parameters an indication to the next higher layer carries, and two Table 3-27 does not: the sender's network
    address, and whether it was this device's child, which a router reports to its trust centre. */
 typedef struct Nwk_LeaveIndication
@@ -588,6 +603,10 @@ typedef struct Nwk_Nwk
     uint32_t addressNoticeHead;
     uint32_t addressNoticeCount;
     uint32_t addressNoticesDropped;
+    Nwk_ChildPollNotice childPollNotices[NWK_CHILD_POLL_NOTICE_MAX];  /* the children's polls, oldest first */
+    uint32_t childPollNoticeHead;
+    uint32_t childPollNoticeCount;
+    uint32_t childPollNoticesDropped;
     uint32_t routeRecordsReceived;  /* every record this device was the destination of, a neighbour's empty one too */
     uint32_t routeRecordsRelayed;   /* the route record commands this device appended to and forwarded */
     uint32_t routeRecordsSent;      /* the route record commands this device initiated */
@@ -821,6 +840,10 @@ int Nwk_AddressOfIeee(const Nwk_Nwk *self, uint64_t extendedAddress, uint16_t *o
 /* The address map's new pairs, changes and conflicts, oldest first, and the ones the full ring lost. */
 uint32_t Nwk_PollAddressNotices(Nwk_Nwk *self, Nwk_AddressNotice *out, uint32_t max);
 uint32_t Nwk_AddressNoticesDropped(const Nwk_Nwk *self);
+
+/* The Data Requests this router's end device children sent, oldest first, and the ones the full ring lost. */
+uint32_t Nwk_PollChildPollNotices(Nwk_Nwk *self, Nwk_ChildPollNotice *out, uint32_t max);
+uint32_t Nwk_ChildPollNoticesDropped(const Nwk_Nwk *self);
 
 /* The pair a Device_annce carries, which the ZDO hands down because a broadcast's header states no IEEE address. The
    row of that IEEE address follows its new network address; a pair that contradicts the map, or this device's own

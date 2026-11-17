@@ -836,6 +836,7 @@ int Zb_StackPollEvent(Zb_Stack *self, Zb_StackEvent *out)
     Nwk_SourceRouteNotice notice;
     Zb_CoreDeparture departure;
     Nwk_AddressNotice pair;
+    Nwk_ChildPollNotice poll;
     Nwk_SyncConfirmParameters sync;
     Aps_Confirm confirm;
     uint8_t capability = 0;
@@ -907,6 +908,16 @@ int Zb_StackPollEvent(Zb_Stack *self, Zb_StackEvent *out)
         out->left.ieee = departure.ieee;
         out->left.rejoin = departure.rejoin;
         out->left.reported = departure.reported;
+        return 1;
+    }
+
+    if (Nwk_PollChildPollNotices(&Zb_CoreLayers(&self->core)->nwk, &poll, 1) == 1)
+    {
+        out->type = ZB_EVENT_CHILD_POLL;
+        out->childPoll.networkAddress = poll.networkAddress;
+        out->childPoll.ieee = poll.extendedAddress;
+        out->childPoll.ieeeKnown = poll.ieeeKnown;
+        out->childPoll.framePending = poll.framePending;
         return 1;
     }
 
