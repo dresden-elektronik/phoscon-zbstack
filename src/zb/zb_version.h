@@ -7,9 +7,9 @@
  */
 
 #define ZB_VERSION_MAJOR 0
-#define ZB_VERSION_MINOR 5
+#define ZB_VERSION_MINOR 6
 #define ZB_VERSION_PATCH 0
 
-#define ZB_VERSION_STRING "0.5.0"
+#define ZB_VERSION_STRING "0.6.0"
 
 #endif /* ZB_VERSION_H */

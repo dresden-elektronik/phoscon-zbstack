@@ -4,7 +4,7 @@ A Zigbee stack in portable C99 for dresden elektronik's ConBee and RaspBee.
 It runs on the host: the 802.15.4 MAC, the network layer, application support and the application layer are one library, and the ConBee or RaspBee, running the Phoscon RCP firmware as a radio co-processor (RCP), is only a radio driven over Spinel.
 A device built on it takes any of the three Zigbee roles: coordinator, router or end device, sleepy or not.
 The router and end device roles are what deCONZ's coming refactor uses to simulate existing products on a real Zigbee network.
-The current version is 0.5.0: usable, with the API still allowed to change before 1.0.0 (`src/zb/zb_version.h`).
+The current version is 0.6.0: usable, with the API still allowed to change before 1.0.0 (`src/zb/zb_version.h`).
 
 ![What runs where, read downwards. On the host: your application, such as a coordinator, a router or a gateway; then the Zigbee stack in amber, four layers: ZDO, ZCL and AF, the application layer; APS, delivery, acknowledgements, binding, groups and keys; NWK, joining, routing, relaying and network security; and the MAC, frames, retries, association and indirect delivery; then the port, the serial device, a millisecond clock and entropy. A rule marked Spinel, HDLC frames over USB or a UART, separates the host from the RCP, which holds Phoscon RCP, the radio firmware doing CSMA, the Ack, the address filter and the energy scan, and the PHY. Under them the five RCPs, ConBee I, II and III and RaspBee I and II; a rule marked 802.15.4, the air at 2.4 GHz; and the Zigbee devices: lights, sensors, plugs and other routers.](docs/images/where.png)
 

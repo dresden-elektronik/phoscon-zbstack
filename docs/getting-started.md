@@ -51,7 +51,7 @@ One program at a time may have a port open.
 The coordinator forms the network, opens it to joining for 180 seconds (`--permit` changes that), and waits; its network key is drawn at random, and its extended PAN identifier is its own address unless `--extended-pan` names one:
 
 ```
-stack      Phoscon Zigbee Stack 0.5.0
+stack      Phoscon Zigbee Stack 0.6.0
 network    coordinator 0x0000, PAN 0xbeef, channel 12, extended PAN 00212effff048a12, ieee 00212effff048a12
 network    endpoint 0x01, profile 0x0104, clusters 0x0006 and 0x0008; permit open 180 s
 network    waiting for a device to join; Ctrl-C ends the run
@@ -105,7 +105,7 @@ The router discovers the network on the channels named, joins it, waits for the 
 
 ```
 router     looking for a network; Ctrl-C ends the run
-stack      Phoscon Zigbee Stack 0.5.0
+stack      Phoscon Zigbee Stack 0.6.0
 network    router 0x5e8f, channel 12, extended PAN 00212effff048a12, ieee 00212effff05a888, holding the network key
 network    serving; Ctrl-C ends the run
 ```
