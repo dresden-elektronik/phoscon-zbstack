@@ -56,6 +56,23 @@ ctest --test-dir build/host --output-on-failure    # every suite and audit; no R
 On Windows the same commands run in a Developer Command Prompt for Visual Studio, with `-G Ninja` on the first, and the programs are `build\host\example_coordinator.exe` and the like.
 `examples/README.md` walks through the three examples and what they print.
 
+## Using it in your project
+
+The stack is a CMake project an application adds to its own build; it installs nothing, so `find_package` does not find it.
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(phoscon_zbstack
+    GIT_REPOSITORY https://github.com/dresden-elektronik/phoscon-zbstack
+    GIT_TAG main)
+FetchContent_MakeAvailable(phoscon_zbstack)
+
+target_link_libraries(my_app PRIVATE zb_stack)
+```
+
+`add_subdirectory` on a checkout or a submodule does the same.
+Added either way, it builds the libraries alone, without the tools, examples and suites (`ZB_BUILD_TREE`), and `docs/guide.md` starts the application.
+
 ## Documentation
 
 For using the stack:
