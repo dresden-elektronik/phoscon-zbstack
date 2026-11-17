@@ -1,9 +1,6 @@
-#define _POSIX_C_SOURCE 200809    /* nanosleep is POSIX; glibc hides it under -std=c99 without this, before any include */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "aps.h"
 #include "aps_frame.h"
@@ -14,7 +11,6 @@
 #include "mac_frame.h"
 #include "nwk.h"
 #include "port.h"
-#include "port_posix.h"
 #include "props.h"
 #include "radio.h"
 #include "rcp_radio.h"
@@ -183,11 +179,7 @@ typedef struct SendRun
 
 static void pauseHost(void)
 {
-    struct timespec ts;
-
-    ts.tv_sec = 0;
-    ts.tv_nsec = (long)PUMP_PAUSE_MS * 1000000;
-    nanosleep(&ts, 0);
+    Port_SleepMs(PUMP_PAUSE_MS);
 }
 
 static const char *statusName(ZbStatus status)
@@ -1457,7 +1449,7 @@ static int runPath(const SendRun *run)
     portCfg.txRingSize = run->txRing;
     portCfg.exclusive = 1;
 
-    if (RcpRadio_Init(&radio, PortPosixOps(), run->timeoutMs) != ZB_OK)
+    if (RcpRadio_Init(&radio, Port_DefaultOps(), run->timeoutMs) != ZB_OK)
     {
         printf("backend    the backend would not initialise\n");
         return 1;

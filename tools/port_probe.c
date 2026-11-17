@@ -4,7 +4,6 @@
 
 #include "device_map.h"
 #include "port.h"
-#include "port_posix.h"
 
 /* Bench tool: open a stick's link exclusively, read it, and report what the port
    delivered. It never writes to the device, and it refuses the port another project
@@ -82,7 +81,7 @@ int main(int argc, char **argv)
     if (total == 0)
         total = 4096;
 
-    status = Port_Init(&port, PortPosixOps());
+    status = Port_Init(&port, Port_DefaultOps());
 
     if (status != ZB_OK)
         return 1;

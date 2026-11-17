@@ -14,6 +14,10 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 if (NOT MSVC)
     add_compile_options(-Wall -Wextra -pedantic)
+else ()
+    # The tools and suites read files and numbers with C99's own fopen and sscanf, which MSVC deprecates in favour of
+    # its _s calls; those are not C99.
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif ()
 
 # A project that adds this directory gets the libraries alone; the tools, the examples and the suites are this tree's.
@@ -36,19 +40,21 @@ endif ()
 set(ZB_PORT_SRCS
         src/port/port.c
         src/port/port_null.c
-        src/port/port_win32.c
         src/port/log_names.c
-        src/port/port_log_win32.c
+        src/port/port_locate.c
 )
 if (UNIX)
     list(APPEND ZB_PORT_SRCS src/port/port_posix.c src/port/port_log_posix.c src/port/port_file_posix.c
-            src/port/port_locate.c src/port/port_locate_sysfs.c)
+            src/port/port_locate_sysfs.c)
 
     if (APPLE)
         list(APPEND ZB_PORT_SRCS src/port/port_locate_darwin.c)
     else ()
         list(APPEND ZB_PORT_SRCS src/port/port_locate_linux.c)
     endif ()
+elseif (WIN32)
+    list(APPEND ZB_PORT_SRCS src/port/port_win32.c src/port/port_log_win32.c src/port/port_file_win32.c
+            src/port/port_locate_win32.c)
 endif ()
 
 # Substrate below the bands: our own byte and text primitives, so that no file under src/
@@ -188,6 +194,8 @@ target_link_libraries(zb_port PUBLIC zb_utils zb_log)
 
 if (APPLE)
     target_link_libraries(zb_port PUBLIC "-framework IOKit" "-framework CoreFoundation")
+elseif (WIN32)
+    target_link_libraries(zb_port PUBLIC bcrypt setupapi cfgmgr32)
 endif ()
 
 # The stack an application meets (D-251): the library over the Spinel backend and the port, reporting events.
@@ -200,7 +208,7 @@ add_library(zb_hearing STATIC src/stack/hearing.c)
 target_include_directories(zb_hearing PUBLIC src/stack)
 target_link_libraries(zb_hearing PUBLIC zb_mac)
 
-if (UNIX AND ZB_BUILD_TREE)
+if (ZB_BUILD_TREE)
     add_executable(port_probe tools/port_probe.c)
     target_link_libraries(port_probe PRIVATE zb_port)
 

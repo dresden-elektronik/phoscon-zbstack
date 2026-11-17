@@ -1,9 +1,6 @@
-#define _POSIX_C_SOURCE 200809    /* nanosleep is POSIX; glibc hides it under -std=c99 without this, before any include */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "aps.h"
 #include "aps_frame.h"
@@ -13,7 +10,6 @@
 #include "nwk.h"
 #include "nwk_frame.h"
 #include "port.h"
-#include "port_posix.h"
 #include "props.h"
 #include "radio.h"
 #include "rcp_radio.h"
@@ -114,11 +110,7 @@ static const char *modeName(Rcp_RadioMode mode)
 
 static void pauseHost(void)
 {
-    struct timespec ts;
-
-    ts.tv_sec = 0;
-    ts.tv_nsec = (long)PUMP_PAUSE_MS * 1000000;
-    nanosleep(&ts, 0);
+    Port_SleepMs(PUMP_PAUSE_MS);
 }
 
 static const char *statusName(ZbStatus status)
@@ -897,7 +889,7 @@ int main(int argc, char **argv)
     if (seconds == 0)
         seconds = 1;
 
-    if (RcpRadio_Init(&radio, PortPosixOps(), timeoutMs) != ZB_OK)
+    if (RcpRadio_Init(&radio, Port_DefaultOps(), timeoutMs) != ZB_OK)
     {
         printf("the backend would not initialise\n");
         return 1;

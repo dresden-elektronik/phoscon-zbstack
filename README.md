@@ -24,7 +24,7 @@ The application turns it, passes the time in milliseconds and lends every buffer
 | The network key | done: a joining device receives it from the trust centre under the Zigbee 3.0 global link key |
 | Application support | in part: unicast, acknowledgements, groups, fragmentation, binding and APS security; not the APS commands |
 | Application layer | in part: endpoints, device discovery, binding, permit and leave management, the Basic cluster; not the other clusters |
-| Hosts | macOS, and Linux on a Raspberry Pi (with a RaspBee on its header) or x86_64; the Windows port is a stub |
+| Hosts | macOS, and Linux on a Raspberry Pi (with a RaspBee on its header) or x86_64; and Windows, measured with a ConBee II and a ConBee III |
 
 A Zigbee 3.0 bulb joins a coordinator built on the library and has its trust-centre link key updated, and a second RCP joins as a router and lets devices join through it.
 `docs/status.md` holds what is next, and what each gap waits on.
@@ -52,7 +52,8 @@ ctest --test-dir build/host --output-on-failure    # every suite and audit; no R
 ./build/host/example_coordinator --path <port> --channel 25
 ```
 
-`<port>` is the RCP's serial device node: `/dev/cu.usbmodem*` on macOS, `/dev/ttyACM*` on Linux.
+`<port>` is the RCP's serial device node: `/dev/cu.usbmodem*` on macOS, `/dev/ttyACM*` on Linux, `COM<n>` on Windows.
+On Windows the same commands run in a Developer Command Prompt for Visual Studio, with `-G Ninja` on the first, and the programs are `build\host\example_coordinator.exe` and the like.
 `examples/README.md` walks through the three examples and what they print.
 
 ## Documentation

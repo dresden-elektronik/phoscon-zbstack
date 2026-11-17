@@ -930,13 +930,13 @@
     "executable": "nwk_tables_contract"
   },
   "port_conformance": {
-    "assertions": 23,
+    "assertions": 21,
     "caseOrder": [],
     "cases": 0,
     "executable": "port_conformance"
   },
   "port_contract": {
-    "assertions": 100,
+    "assertions": 101,
     "caseOrder": [
       "caseInitDefaults",
       "caseNoDefaultPath",
@@ -951,7 +951,7 @@
       "caseBufferedBytesSurviveAFault",
       "caseWriteFault",
       "caseScriptedEntropyIsConsumedInOrder",
-      "caseStubTargetFailsLoudly",
+      "caseUnimplementedTargetFailsLoudly",
       "caseTwoPortsCoexist"
     ],
     "cases": 15,
@@ -992,6 +992,21 @@
     ],
     "cases": 12,
     "executable": "port_posix"
+  },
+  "port_win32": {
+    "assertions": 51,
+    "caseOrder": [
+      "caseAbsentDevice",
+      "caseUnsupportedBaud",
+      "caseSelectorWithNoMatch",
+      "caseEntropyFillsAndRefusesWithoutWriting",
+      "caseSleepTakesItsTime",
+      "caseMonotonicClockAnswers",
+      "caseDefaultOpsAreThisTargets",
+      "caseFileRoundTrip"
+    ],
+    "cases": 8,
+    "executable": "port_win32"
   },
   "props": {
     "assertions": 141,

@@ -1,9 +1,6 @@
-#define _POSIX_C_SOURCE 200809    /* nanosleep is POSIX; glibc hides it under -std=c99 without this, before any include */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "aps.h"
 #include "zb_core.h"
@@ -12,7 +9,6 @@
 #include "mac.h"
 #include "nwk.h"
 #include "port.h"
-#include "port_posix.h"
 #include "props.h"
 #include "radio.h"
 #include "rcp_radio.h"
@@ -150,11 +146,7 @@ typedef struct JoinRun
 
 static void pauseHost(void)
 {
-    struct timespec ts;
-
-    ts.tv_sec = 0;
-    ts.tv_nsec = (long)PUMP_PAUSE_MS * 1000000;
-    nanosleep(&ts, 0);
+    Port_SleepMs(PUMP_PAUSE_MS);
 }
 
 static const char *statusName(ZbStatus status)
@@ -288,7 +280,7 @@ static int bringUp(Rcp_Radio *radio, const JoinRun *run)
     portCfg.txRingSize = run->txRing;
     portCfg.exclusive = 1;
 
-    if (RcpRadio_Init(radio, PortPosixOps(), run->timeoutMs) != ZB_OK)
+    if (RcpRadio_Init(radio, Port_DefaultOps(), run->timeoutMs) != ZB_OK)
     {
         printf("backend    the backend would not initialise\n");
         return 0;
@@ -575,7 +567,7 @@ static void printBeacon(const Mac_BeaconNotification *beacon)
 /* The parent's half: 3.6.5's on-demand beacon carrying Table 3-83's payload, and 10.21.5.2's answer composed by the
    layer above the MAC when a child asks (nwk_join.c drains the MAC's association ring and allocates 3.6.1.8's
    address). This run only states the beacon and prints what the layer above reports. */
-static int runParent(Rcp_Radio *radio, Zb_Layers *stack, const JoinRun *run, uint32_t ownIeee)
+static int runParent(Rcp_Radio *radio, Zb_Layers *stack, const JoinRun *run, uint64_t ownIeee)
 {
     Nwk_JoinIndicationParameters indications[NWK_JOIN_INDICATION_MAX];
     Aps_Indication apsIndications[APS_INDICATION_MAX];

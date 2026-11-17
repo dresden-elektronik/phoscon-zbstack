@@ -24,10 +24,11 @@ Every id, its title and where it stands.
 | D-26 | Enforcing one session per port | Open |
 | D-111 | 3.6.1.10.5's 0x0e verification is not built | Open |
 
-### Settled: the archive the code cites (217)
+### Settled: the archive the code cites (218)
 
 | id | title | status |
 | --- | --- | --- |
+| D-302 | The Windows port waits on its COM port through COMMTIMEOUTS, with no overlapped I/O | Decided |
 | D-301 | `Zb_Stack` offers a sleepy end device, which polls at 250 ms while it attaches and 7.5 s after | Decided |
 | D-300 | A device whose receiver rests hears only its poll's window, even on a radio that never sleeps | Decided |
 | D-299 | A joiner updates its trust centre link key unless told to keep the one it joined with | Decided |
@@ -247,6 +248,18 @@ Every id, its title and where it stands.
 | D-1 | Build and test scaffolding | Decided |
 
 ## Entries
+
+## D-302 · The Windows port waits on its COM port through COMMTIMEOUTS, with no overlapped I/O
+
+**Status:** Decided · **tags:** decision, seam
+
+**Decided: `port_win32` opens a COM port unshared, 8N1 binary with no flow control, and reads under timeouts that return at once; `Port_Wait` sets timeouts of MAXDWORD, MAXDWORD and its limit for one ReadFile, which returns on the first octet or at the limit.**
+Overlapped I/O would carry an event and an OVERLAPPED through every call; one bounded read needs neither and keeps the POSIX backend's shape.
+A write is bounded at 100 ms and leaves the rest on the ring, as an EAGAIN does.
+A line error does not stop the port: ClearCommError clears it and the HDLC framing finds the next frame.
+
+**Consequences.**
+The `stack` suite's pseudo-terminal cases run on POSIX only; `port_win32` covers what needs no device.
 
 ## D-301 · `Zb_Stack` offers a sleepy end device, which polls at 250 ms while it attaches and 7.5 s after
 

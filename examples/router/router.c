@@ -86,7 +86,8 @@ static void usage(void)
     printf("usage: example_router --path <serial device> --channels <list>\n"
            "                       [--extended-pan hex] [--permit seconds] [--baud n] [--ieee hex] [--seconds n]\n"
            "                       [--config file]\n"
-           "  --path           the RCP's device node: /dev/cu.usbmodem* on macOS, /dev/ttyACM* on Linux\n"
+           "  --path           the RCP's device node: /dev/cu.usbmodem* on macOS, /dev/ttyACM* on Linux,\n"
+           "                   COM<n> on Windows\n"
            "  --channels       a comma list of 11 to 26; a Beacon Request goes out on each, so nothing is defaulted\n"
            "  --extended-pan   join only this network; the best one heard otherwise\n"
            "  --permit         how long devices may join through this router, 180 s by default, 0 to keep it closed\n"
@@ -442,7 +443,9 @@ int main(int argc, char **argv)
     uint32_t startedMs;
     ZbStatus status;
 
-    setvbuf(stdout, 0, _IOLBF, 0);          /* one line at a time, into a pipe or a file as onto a terminal */
+    /* Each printf straight out, into a pipe or a file as onto a terminal. Not a line buffer: MSVC's C library refuses
+       one of size 0 and buffers _IOLBF in full, so lines would wait in a pipe there. */
+    setvbuf(stdout, 0, _IONBF, 0);
 
     if (!parseOptions(argc, argv, &options))
         return 2;

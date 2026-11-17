@@ -72,7 +72,8 @@ ROWS = [
     ('BANDS B AND C, SCRIPTED BYTES', ('port_null', 'a scripted port: bytes in, bytes captured',
                                        'blk'),
      [(None, ['rcp_radio', 'port_contract', 'port_conformance'], 'tag'),
-      ('over a pseudo-terminal or a sysfs-shaped tree instead', ['port_posix', 'port_locate'], 'tag')],
+      ('over a pseudo-terminal or a sysfs-shaped tree instead', ['port_posix', 'port_locate'], 'tag'),
+      ('on Windows, with no device', ['port_win32'], 'tag')],
      ['the Spinel backend and the port byte for byte, with every split and failure the script '
       'names'],
      'nothing', 'portnull'),

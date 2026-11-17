@@ -93,7 +93,7 @@ BACKENDS = [
 ]
 PORTS = [
     [('port_posix', 'Linux %s macOS %s BSD' % (D, D), 'blk', ['src/port/port_posix.c']),
-     ('port_win32', 'Windows, a stub', 'owe', ['src/port/port_win32.c']),
+     ('port_win32', 'Windows', 'blk', ['src/port/port_win32.c']),
      ('port_null', 'scripted, no device', 'blk', ['src/port/port_null.c']),
      ('port_log', 'a line per record', 'blk',
       ['src/port/port_log_posix.c', 'src/port/port_log_win32.c', 'src/port/log_names.c'])],

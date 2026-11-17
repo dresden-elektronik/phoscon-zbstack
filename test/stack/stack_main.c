@@ -23,10 +23,13 @@ void caseStackAddressesAreTold(void);
 #if ZB_ZDO_CLIENT
 void caseStackZdoRequestsAreNumberedByTheDeviceObject(void);
 #endif
+/* The RCP answers on a pseudo-terminal, which only a POSIX host has (cases_rcp.c). */
+#if STACK_RCP_CASES
 void caseStackRcpThatMissesAResetStillComesUp(void);
 void caseStackRcpThatNeverAnswersFailsItsStart(void);
 void caseStackRcpGoneQuietIsLostAndComesBack(void);
 void caseStackRcpUnpluggedIsLostAndComesBack(void);
+#endif
 void caseStackCoordinatorComesBackFromItsState(void);
 void caseStackRouterComesBackFromItsState(void);
 void caseStackEndDeviceComesBackFromItsState(void);
@@ -63,10 +66,12 @@ int main(void)
 #if ZB_ZDO_CLIENT
     caseStackZdoRequestsAreNumberedByTheDeviceObject();
 #endif
+#if STACK_RCP_CASES
     caseStackRcpThatMissesAResetStillComesUp();
     caseStackRcpThatNeverAnswersFailsItsStart();
     caseStackRcpGoneQuietIsLostAndComesBack();
     caseStackRcpUnpluggedIsLostAndComesBack();
+#endif
     caseStackCoordinatorComesBackFromItsState();
     caseStackRouterComesBackFromItsState();
     caseStackEndDeviceComesBackFromItsState();

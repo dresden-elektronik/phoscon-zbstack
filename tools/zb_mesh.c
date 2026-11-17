@@ -1,5 +1,3 @@
-#define _POSIX_C_SOURCE 200809    /* clock_gettime is POSIX; glibc hides it under -std=c99 without this, before any include */
-
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +8,7 @@
 #include "mac_frame.h"
 #include "nwk.h"
 #include "nwk_frame.h"
-#include "port_posix.h"
+#include "port.h"
 #include "protect.h"
 #include "rcp_radio.h"
 #include "zb_time.h"
@@ -519,13 +517,14 @@ static void traceFrame(const uint8_t *mpdu, uint32_t len, int sent, int cut, ZbS
     uint32_t payloadLen = 0;
     uint32_t offset = 0;
     uint32_t nwkPayloadLen = 0;
-    struct timespec ts;
+    uint32_t nowMs;
 
     if (MacFrame_Parse(mpdu, len, 0, &mac, &payload, &payloadLen, &refusal) != ZB_OK)
         return;
 
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    printf("frame %ld.%03ld %s%s status=%d track=%u writes=%u asking=%x mac=%u dsn=%u", (long)ts.tv_sec, ts.tv_nsec / 1000000,
+    nowMs = Port_NowMs();
+    printf("frame %u.%03u %s%s status=%d track=%u writes=%u asking=%x mac=%u dsn=%u", (unsigned)(nowMs / 1000),
+           (unsigned)(nowMs % 1000),
            sent ? "tx" : "rx", cut ? " cut" : "", (int)status, (unsigned)txTrackInUse(), (unsigned)s_stick.writeCount,
            SpinelSession_Busy(&s_stick.session) ? (unsigned)SpinelSession_PendingProp(&s_stick.session) : 0,
            (unsigned)mac.frameType, (unsigned)mac.seq);
@@ -724,7 +723,7 @@ static int openStick(const Options *options)
     uint32_t startMs;
     uint32_t nowMs;
 
-    if (RcpRadio_Init(&s_stick, PortPosixOps(), RCP_RADIO_REPLY_TIMEOUT_MS) != ZB_OK)
+    if (RcpRadio_Init(&s_stick, Port_DefaultOps(), RCP_RADIO_REPLY_TIMEOUT_MS) != ZB_OK)
         return 0;
 
     memset(&portCfg, 0, sizeof portCfg);
@@ -789,7 +788,7 @@ int main(int argc, char **argv)
     time_t upAt = 0;
     time_t nextBroadcast = 0;
     time_t nextGhost = 0;
-    struct timespec lastUni = { 0, 0 };
+    uint32_t lastUniMs = 0;
     uint32_t sequenceUni = 0;
     uint32_t sequenceBroadcast = 0;
     int up = 0;
@@ -810,7 +809,7 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    setvbuf(stdout, 0, _IOLBF, 0);
+    setvbuf(stdout, 0, _IONBF, 0);         /* straight out: MSVC refuses a line buffer of size 0 */
 
     if (!openStick(&options))
     {
@@ -895,7 +894,7 @@ int main(int argc, char **argv)
                 onSent(&event.sent, event.status, t);
 
                 if (options.lockstep && event.sent.tag == TAG_UNI)
-                    clock_gettime(CLOCK_MONOTONIC, &lastUni);
+                    lastUniMs = Port_NowMs();
 
                 break;
 
@@ -910,16 +909,12 @@ int main(int argc, char **argv)
 
         if (up && !stopping && !left && now >= upAt + options.trafficAt)
         {
-            struct timespec ts;
-
-            clock_gettime(CLOCK_MONOTONIC, &ts);
-
             if (options.uniMs != 0 && !(options.lockstep && s_unicastOut)
-                && (ts.tv_sec - lastUni.tv_sec) * 1000 + (ts.tv_nsec - lastUni.tv_nsec) / 1000000 >= (long)options.uniMs)
+                && Port_NowMs() - lastUniMs >= options.uniMs)
             {
                 uint16_t destination = options.toAll ? nextPeer() : nextNeighbour();
 
-                lastUni = ts;
+                lastUniMs = Port_NowMs();
 
                 if (destination != 0xffff)
                 {

@@ -71,7 +71,7 @@ static void usage(void)
     printf("usage: example_interview --path <serial device>\n"
            "                         [--channel 25] [--pan beef] [--extended-pan hex]\n"
            "                         [--permit seconds] [--baud n] [--ieee hex] [--seconds n]\n"
-           "  --path      the RCP's device node: /dev/cu.usbmodem* on macOS, /dev/ttyACM* on Linux\n"
+           "  --path      the RCP's device node: /dev/cu.usbmodem* on macOS, /dev/ttyACM* on Linux, COM<n> on Windows\n"
            "  --channel   defaults to 25, and is the one your network should be alone on\n"
            "  --permit    how long joining stays open, 180 s by default, 0 to keep it closed\n"
            "  --baud      the link's rate: 57600 for a ConBee I or a RaspBee I, the port's default otherwise\n"
@@ -274,7 +274,9 @@ int main(int argc, char **argv)
     uint32_t startedMs;
     ZbStatus status;
 
-    setvbuf(stdout, 0, _IOLBF, 0);          /* one line at a time, into a pipe or a file as onto a terminal */
+    /* Each printf straight out, into a pipe or a file as onto a terminal. Not a line buffer: MSVC's C library refuses
+       one of size 0 and buffers _IOLBF in full, so lines would wait in a pipe there. */
+    setvbuf(stdout, 0, _IONBF, 0);
 
     if (!parseOptions(argc, argv, &options))
         return 2;

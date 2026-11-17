@@ -13,6 +13,11 @@
 
 #include <stdint.h>
 
+#include "log.h"
+
+/* The longest line LogNames_Line builds, its newline included. */
+#define LOG_NAMES_LINE_MAX 96
+
 /* The name of a section (section = component >> 8); "none" for LOG_SECTION_NONE,
    "unknown" for a section the table has no row for (a new section is still a valid
    report, docs/internals/coding-rules.md §5). */
@@ -25,5 +30,10 @@ const char *LogNames_TopicName(uint16_t component);
 /* The name of a reason code; "none" for LOG_REASON_NONE, "unknown" otherwise for a code
    the table has no row for. */
 const char *LogNames_ReasonName(uint32_t reason);
+
+/* The human line of one record, newline-terminated and not NUL-terminated, into `line` of LOG_NAMES_LINE_MAX octets;
+   its length. The component is hex, its canonical display, and the rest decimal: every platform sink writes this line,
+   so a log reads the same on every host. */
+uint32_t LogNames_Line(char *line, const Log_Record *record);
 
 #endif /* LOG_NAMES_H */

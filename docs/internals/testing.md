@@ -13,7 +13,7 @@ A host suite is the default place to find a bug.
 The rig discovers behaviour, and what it discovers is frozen into a fixture or a vector so that a host suite defends it from then on.
 The Python harness is the third instrument (§7).
 
-![A table of the evidence that tests the stack, one row per layer, from what needs nothing to what needs real hardware; each row shows what it stands on, the ctest names that run on it with a line saying what they prove, and what it needs. The audits read the tree's source and documents as text. The codecs and pools of the substrate, band A, band B and the examples' saved network run on input written in the case, with no radio. The crypto suites check published vectors from FIPS-197, NIST SP 800-38 and R23.1 Annex C. Every band-A layer, from mac to stack, runs over loopback_radio, in amber, the seam's scripted implementation with no RCP and no clock. The Spinel backend and the port run over port_null's scripted bytes, and port_posix over a pseudo-terminal. All of these need nothing. The fixtures in test/fixtures/ are re-read by samples, replayed by interop, and read by several other suites; they need a capture. Outside ctest, the two-RCP rig drives real RCPs on a quiet channel with the tools and harness instruments, and an arrow shows what it finds frozen into a capture.](../images/testing.png)
+![A table of the evidence that tests the stack, one row per layer, from what needs nothing to what needs real hardware; each row shows what it stands on, the ctest names that run on it with a line saying what they prove, and what it needs. The audits read the tree's source and documents as text. The codecs and pools of the substrate, band A, band B and the examples' saved network run on input written in the case, with no radio. The crypto suites check published vectors from FIPS-197, NIST SP 800-38 and R23.1 Annex C. Every band-A layer, from mac to stack, runs over loopback_radio, in amber, the seam's scripted implementation with no RCP and no clock. The Spinel backend and the port run over port_null's scripted bytes, port_posix over a pseudo-terminal, and port_win32 on Windows with no device. All of these need nothing. The fixtures in test/fixtures/ are re-read by samples, replayed by interop, and read by several other suites; they need a capture. Outside ctest, the two-RCP rig drives real RCPs on a quiet channel with the tools and harness instruments, and an arrow shows what it finds frozen into a capture.](../images/testing.png)
 
 *Figure 1: what proves what.*
 Everything above the rig runs in `ctest` with no RCP, every band-A layer over the scripted `loopback_radio`, in amber; what the rig finds on the air comes back as a capture in `test/fixtures/`.
@@ -49,6 +49,7 @@ An entry marked **not built** specifies a suite whose module does not exist yet.
 
 - **`port_contract`** (**built**): rings, entropy and the clock, `docs/porting.md` §1.
 - **`port_posix`** (**built**): the POSIX byte stream, including raw 8N1 over a pseudo-terminal, `docs/porting.md` §1, and the POSIX file calls on a scratch file (D-278).
+- **`port_win32`** (**built** on Windows): the Windows backend with no device attached: an absent COM port in both name forms, a refused rate, a selector no device carries, entropy, the clock, sleeping, and the file calls of `port_posix` on a scratch file.
 - **`port_locate`** (**built**): an RCP found by its USB serial number (D-282) on a sysfs-shaped tree made at configure time: both USB layouts, the hub above a device, a match with no node, two devices with one serial; and the host's own list, read only.
 - **`ex_config`** (**built**): the examples' saved network, `examples/README.md`: a full `Zb_State` written and read back on a scratch file, every kind of file the module did not write refused with the caller's config untouched, a failed save leaving the old file, and the samples in `examples/config/` read.
 - **`port_conformance`** (**built**): one recorded transcript replayed through every implemented port, `docs/porting.md` §2.
@@ -88,7 +89,7 @@ An entry marked **not built** specifies a suite whose module does not exist yet.
 #### End to end
 
 - **`layers`** (**built**): `Zb_Layers` through its public operations, one stack and two, `docs/internals/architecture.md` §5.2.
-- **`stack`** (**built**): `Zb_Stack` read only through its events, over loopback models: what `Zb_StackStart` refuses, a coordinator coming up, a network key never made up without entropy, a router joining a coordinator, the two exchanging an acknowledged frame (D-251), an end device doing the same both ways (D-301), a sleepy one too, its parent's frame taken by its poll and its link key verified at the attach rate (D-301), and a child its parent forgot rejoining, the permit closed (D-268, D-269); and over a pseudo-terminal it answers as an RCP does, an RCP that misses a RESET, never answers, or goes quiet and comes back (D-264).
+- **`stack`** (**built**): `Zb_Stack` read only through its events, over loopback models: what `Zb_StackStart` refuses, a coordinator coming up, a network key never made up without entropy, a router joining a coordinator, the two exchanging an acknowledged frame (D-251), an end device doing the same both ways (D-301), a sleepy one too, its parent's frame taken by its poll and its link key verified at the attach rate (D-301), and a child its parent forgot rejoining, the permit closed (D-268, D-269); and, on a POSIX host, over a pseudo-terminal it answers as an RCP does, an RCP that misses a RESET, never answers, or goes quiet and comes back (D-264).
 - **`interop`** (**built**): a test network on channel 15, captured and replayed offline.
 - **`hearing`** (**built**): the shim in `src/stack` that `tools/zb_mesh` stands on: it judges the hop rather than the originator and reports a cut unicast as NO_ACK (D-260).
 
@@ -103,7 +104,7 @@ An entry marked **not built** specifies a suite whose module does not exist yet.
 - **`conformance_audit`** (**built**): `docs/internals/conformance.md`'s rows against the clause marks in the files they name, both directions, with the unmarked files and the defect marks held at their measured count.
 - **`samples`** (**built**): every fixture under `test/fixtures/`, dissected by `harness/ieee802154.py`.
 - **`band_a_size`** (**built**): band A compiled for the ConBee II's Cortex-M0+, over the source set `CMakeLists.txt` names, `docs/memory.md`.
-- **`mem_size`** (**built**): the RAM of every object, member by member, on the Cortex-M0+ and on the host, and the deepest call chain from each public entry point on the Cortex-M0+, which `docs/memory.md` cites; a cycle it does not know to end fails it.
+- **`mem_size`** (**built** under gcc or clang): the RAM of every object, member by member, on the Cortex-M0+ and on the host, and the deepest call chain from each public entry point on the Cortex-M0+, which `docs/memory.md` cites; a cycle it does not know to end fails it.
 
 #### Not built
 
@@ -222,7 +223,7 @@ The target contract is `docs/porting.md` §3.
 
 - macOS, **implemented, primary**: every rig gate runs on macOS.
 - Linux, **implemented, measured**: the build and every suite pass on a Raspberry Pi 5 (aarch64) and on x86_64 Ubuntu and Debian, and a RaspBee II on a Pi 5's UART joins a network (`docs/porting.md` §3).
-- Windows, **stub**: `port_win32` answers `ZB_ERR_UNSUPPORTED` to every call, and no gate passes because of it.
+- Windows, **implemented, built**: the build and every suite pass on Windows 11 with MSVC 17.7, where `stack` runs without the four cases that need a pseudo-terminal (D-302), and a ConBee II and a ConBee III each run the example coordinator (`docs/porting.md` §3).
 - WASM, deferred to stage 3.
 - MCU, parked (decision 18).
 

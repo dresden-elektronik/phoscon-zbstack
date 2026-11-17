@@ -1,16 +1,12 @@
-#define _POSIX_C_SOURCE 200809    /* nanosleep is POSIX; glibc hides it under -std=c99 without this, before any include */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "device_map.h"
 #include "protect.h"
 #include "mac.h"
 #include "mac_frame.h"
 #include "port.h"
-#include "port_posix.h"
 #include "props.h"
 #include "radio.h"
 #include "rcp_radio.h"
@@ -59,11 +55,7 @@ static const char *capNames[CAP_NAMED] =
 
 static void probePause(void)
 {
-    struct timespec ts;
-
-    ts.tv_sec = 0;
-    ts.tv_nsec = (long)PROBE_PAUSE_MS * 1000000;
-    nanosleep(&ts, 0);
+    Port_SleepMs(PROBE_PAUSE_MS);
 }
 
 static const char *modeName(Rcp_RadioMode mode)
@@ -959,7 +951,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    if (RcpRadio_Init(&radio, PortPosixOps(), timeoutMs) != ZB_OK)
+    if (RcpRadio_Init(&radio, Port_DefaultOps(), timeoutMs) != ZB_OK)
     {
         printf("the backend would not initialise\n");
         return 1;

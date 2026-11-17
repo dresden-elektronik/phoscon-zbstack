@@ -3,8 +3,8 @@
 
 #include "port.h"
 
-/* Stub target: no Windows host has been measured (docs/porting.md §3). Every
-   call answers ZB_ERR_UNSUPPORTED and no conformance gate counts it as passing. */
-const PortDeviceOps *PortWin32StubOps(void);
+/* Windows: a COM port through CreateFile, a DCB and COMMTIMEOUTS, CNG's generator for entropy and the performance
+   counter for Port_NowMs (docs/porting.md §3). */
+const PortDeviceOps *PortWin32Ops(void);
 
 #endif /* PORT_WIN32_H */

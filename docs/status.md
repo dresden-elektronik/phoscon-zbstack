@@ -13,7 +13,7 @@ What the stack can do, what it cannot yet, and what comes next.
 | The network key | **done** | A joined device receives it from the trust centre under the global link key, and a Zigbee 3.0 device is given its own trust-centre link key when it asks; a joiner built on the stack asks for its own, unless told to keep the one it joined with. |
 | Application support | **in part** | Unicast, acknowledgements, groups, duplicate rejection, fragmentation, binding and APS security; the APS commands beyond key exchange are not built. |
 | The application layer | **in part** | The device door and its join, the endpoint registry, the device object's discovery, table reports, permit and leave management, binding, and the Basic cluster; not the other clusters. |
-| Hosts | **in part** | The suites pass on macOS and on Linux (Debian on a Raspberry Pi 5, Ubuntu and Debian containers on x86_64); the examples run on Linux on a Raspberry Pi; the Windows port is a stub. |
+| Hosts | **in part** | The suites pass on macOS, on Linux (Debian on a Raspberry Pi 5, Ubuntu and Debian containers on x86_64) and on Windows 11 with MSVC; the examples run on Linux on a Raspberry Pi, and on Windows over a ConBee II and a ConBee III. |
 | Cross-platform CI | **not started** | Nothing yet; the goal is one local command that builds, tests and audits the tree on Windows, Linux and macOS, with no hosted service. |
 | Fuzzing | **not started** | Nothing yet; the goal is libFuzzer targets over the MAC and NWK decoders, and a sanitizer run that reports no fault. |
 | A microcontroller target | **parked** | The library measures 33 KiB of flash and no RAM of its own on a Cortex-M0+; no target is chosen. |
@@ -36,7 +36,6 @@ An application registers its endpoint, the device object answers and asks discov
 | clusters beyond Basic | the Cluster Library's other clusters, starting with On/Off and Level Control, so an example can act on a command |
 | device-object requests | the management and binding requests in `ZB_ZDO_CLIENT` beside its discovery requests, and the network-update commands |
 | APS commands | the commands beyond key exchange |
-| Windows | `port_win32` beyond its stub |
 | Green Power | the proxy and sink of the Green Power specification, so battery-free switches reach the network through a router or the coordinator |
 | Touchlink | Inter-PAN frames, which the network layer refuses today, then Touchlink commissioning over them, so a light can be paired by proximity |
 | a sleepy end device under another stack's parent | a bench run measuring the poll window against a parent that is not this stack, which fixes `MAC_POLL_WAIT_MS` (D-300), and the Ack's Frame Pending bit measured on the ConBee III and the ESP32-C6 board, where only the ConBee II's is |

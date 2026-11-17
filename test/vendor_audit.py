@@ -86,7 +86,7 @@ def checkLibrary(root, library, violations):
     for directory, dirs, files in os.walk(base):
         dirs[:] = sorted(d for d in dirs if not d.startswith("."))
         for fileName in sorted(files):
-            rel = os.path.relpath(os.path.join(directory, fileName), base)
+            rel = os.path.relpath(os.path.join(directory, fileName), base).replace(os.sep, "/")
             if rel not in listed:
                 fail(violations, f"vendor/{name}/{rel}: present in the tree but not pinned in MANIFEST")
 

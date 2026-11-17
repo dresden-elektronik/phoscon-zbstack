@@ -67,7 +67,7 @@ PLATFORM_HEADERS = {
     "termios.h", "unistd.h", "fcntl.h", "errno.h", "sys/ioctl.h", "sys/socket.h",
     "netinet/in.h", "arpa/inet.h", "pthread.h", "poll.h", "select.h", "sys/select.h",
     "windows.h", "winbase.h", "setupapi.h", "mman.h", "sys/mman.h", "dlfcn.h",
-    "sys/random.h", "dirent.h",
+    "sys/random.h", "dirent.h", "bcrypt.h", "cfgmgr32.h", "devguid.h", "devpkey.h", "initguid.h",
     "CoreFoundation/CoreFoundation.h", "IOKit/IOKitLib.h", "IOKit/serial/IOSerialKeys.h",
 }
 
@@ -75,7 +75,9 @@ PLATFORM_HEADERS = {
 # link, the log sink that writes the host's line (docs/internals/coding-rules.md §5), and the lookup of a stick by its
 # USB serial number (D-282). Every other file in the tree may include only a freestanding header and project headers.
 PLATFORM_HEADER_FILES = {"src/port/port_posix.c", "src/port/port_log_posix.c", "src/port/port_file_posix.c",
-                         "src/port/port_locate_sysfs.c", "src/port/port_locate_darwin.c"}
+                         "src/port/port_locate_sysfs.c", "src/port/port_locate_darwin.c",
+                         "src/port/port_win32.c", "src/port/port_log_win32.c", "src/port/port_file_win32.c",
+                         "src/port/port_locate_win32.c"}
 
 # The bands that must compile against a freestanding C implementation: only the headers
 # C99 §4 promises without a hosted library, plus project headers (docs/internals/coding-rules.md §1).
@@ -504,7 +506,7 @@ def checkLayout(rel, lines):
 
 def band_of(path):
     for prefix, band in BAND_OF_DIR.items():
-        if path.startswith(prefix + os.sep) or path == prefix:
+        if path.startswith(prefix + "/") or path == prefix:
             return band
     return None
 
@@ -534,12 +536,12 @@ def sourceFiles(root, only=None):
             dirs[:] = sorted(d for d in dirs if not d.startswith("."))
             for name in sorted(files):
                 if name.endswith((".c", ".h")):
-                    yield os.path.relpath(os.path.join(directory, name), root)
+                    yield os.path.relpath(os.path.join(directory, name), root).replace(os.sep, "/")
 
 
 def checkExampleIncludes(root, rel, lines):
     """An example reaches for the façade and not for the layers under it."""
-    if not rel.startswith("examples" + os.sep):
+    if not rel.startswith("examples/"):
         return
 
     for number, line in enumerate(lines, 1):
@@ -585,11 +587,12 @@ def resolveInclude(root, rel, target):
             continue
         for directory, dirs, files in os.walk(base):
             dirs[:] = sorted(d for d in dirs if not d.startswith("."))
-            hit = os.path.relpath(os.path.join(directory, target), root)
+            hit = os.path.relpath(os.path.join(directory, target), root).replace(os.sep, "/")
             # A directory with a band of its own inside another band's is walked from both prefixes
             if target in files and hit not in found:
                 found.append(hit)
     candRel = os.path.relpath(os.path.join(os.path.dirname(os.path.join(root, rel)), target), root)
+    candRel = candRel.replace(os.sep, "/")
     if os.path.exists(os.path.join(root, candRel)) and candRel not in found:
         found.append(candRel)
     if not found:
@@ -607,7 +610,7 @@ def isHostTestFile(rel):
     # hosted C library; the bands and the vendored library code may not.
     if rel.startswith("test/") or rel.startswith("tools/"):
         return True
-    return rel.startswith("vendor/") and os.sep + "tests" + os.sep in rel
+    return rel.startswith("vendor/") and "/tests/" in rel
 
 
 def codeLines(lines):
@@ -780,7 +783,8 @@ LOG_CODE_RE = re.compile(r'^\s*#\s*define\s+(LOG_(?:SECTION|COMP)_[A-Za-z0-9_]+)
 # joining the exemption. The port's file calls are the same shape: one contract header (src/port/port_file.h) and one
 # backend per target, linked by the build (D-278), and so is the stick lookup's platform half (D-282).
 SEAM_IMPLS = {"src/crypto/aes_modes", "src/crypto/aes_scalar", "src/crypto/aes_table", "src/port/port_file_posix",
-              "src/port/port_locate_sysfs", "src/port/port_locate_darwin", "src/port/port_locate_linux"}
+              "src/port/port_file_win32", "src/port/port_locate_sysfs", "src/port/port_locate_darwin",
+              "src/port/port_locate_linux", "src/port/port_locate_win32"}
 
 
 def checkModulePairs(root):
@@ -802,7 +806,7 @@ def checkStreamFields(root):
     """A U_BStream's fields belong to the vendored code and src/utils/zb_bstream: every other source in src/
     asks through the calls (docs/internals/coding-rules.md §1). A stream is known by the names a file declares
     with the type, and by the struct members and parameters src/ headers declare with it."""
-    sources = [rel for rel in sourceFiles(root, ("src",)) if not rel.startswith(os.path.join("src", "utils") + os.sep)]
+    sources = [rel for rel in sourceFiles(root, ("src",)) if not rel.startswith("src/utils/")]
     shared = set()
     texts = {}
 
@@ -878,7 +882,7 @@ def main():
     for rel in sourceFiles(root):
         checked += 1
         checkFile(root, rel)
-        checkExampleIncludes(root, rel, open(os.path.join(root, rel)).read().splitlines())
+        checkExampleIncludes(root, rel, open(os.path.join(root, rel), encoding="utf-8").read().splitlines())
     checkModulePairs(root)
     checkLogCodes(root)
     checkStreamFields(root)

@@ -2,7 +2,6 @@
 
 #include "port.h"
 #include "port_null.h"
-#include "port_win32.h"
 #include "test_harness.h"
 
 #define TRANSCRIPT_LEN 900
@@ -454,23 +453,45 @@ static void caseScriptedEntropyIsConsumedInOrder(void)
     Port_Close(&port);
 }
 
-static void caseStubTargetFailsLoudly(void)
+/* A target that implements nothing but its door and its entropy refusal: what a target answers before its device
+   work exists, as a port for a new platform starts out (docs/porting.md §3). */
+static ZbStatus refusingOpen(Port *port, const char *path, const PortConfig *config)
+{
+    (void)path;
+    (void)config;
+    port->fault = PORT_FAULT_OPEN;
+    port->platformErrno = 0;
+    return ZB_ERR_UNSUPPORTED;
+}
+
+static ZbStatus refusingEntropy(Port *port, uint8_t *out, uint32_t len)
+{
+    (void)port;
+    (void)out;
+    (void)len;
+    return ZB_ERR_UNSUPPORTED;
+}
+
+static const PortDeviceOps s_refusingOps = { "refusing", refusingOpen, 0, 0, 0, 0, refusingEntropy, 0 };
+
+static void caseUnimplementedTargetFailsLoudly(void)
 {
     Port port;
     static uint8_t payload[8];
     uint32_t written;
 
     buildTranscript(payload, sizeof payload);
-    Port_Init(&port, PortWin32StubOps());
+    Port_Init(&port, &s_refusingOps);
     Test_Expect(Port_Open(&port, "COM9", 0) == ZB_ERR_UNSUPPORTED,
-           "a stub answers ZB_ERR_UNSUPPORTED, never silence");
-    Test_Expect(Port_State(&port) == PORT_STATE_FAULT, "a stub is never treated as open");
-    Test_Expect(Port_Fault(&port) == PORT_FAULT_OPEN, "the stub names an open fault");
+           "a target that cannot open answers ZB_ERR_UNSUPPORTED, never silence");
+    Test_Expect(Port_State(&port) == PORT_STATE_FAULT, "it is never treated as open");
+    Test_Expect(Port_Fault(&port) == PORT_FAULT_OPEN, "it names an open fault");
     Test_Expect(Port_Write(&port, payload, sizeof payload, &written) == ZB_ERR_DEVICE_LOST,
-           "a stub cannot carry traffic");
-    Test_Expect(strcmp(Port_TargetName(&port), "win32-stub") == 0, "a stub names itself");
+           "it cannot carry traffic");
+    Test_Expect(strcmp(Port_TargetName(&port), "refusing") == 0, "it names itself");
     Test_Expect(Port_Entropy(&port, payload, sizeof payload) == ZB_ERR_UNSUPPORTED,
            "and it refuses entropy the way it refuses everything else: ZB_ERR_UNSUPPORTED is a contract answer, not a failure");
+    Test_Expect(Port_Wait(&port, 0) == ZB_ERR_NOT_OPEN, "and there is nothing to wait on");
     Port_Close(&port);
 }
 
@@ -557,7 +578,7 @@ int main(void)
     caseBufferedBytesSurviveAFault();
     caseWriteFault();
     caseScriptedEntropyIsConsumedInOrder();
-    caseStubTargetFailsLoudly();
+    caseUnimplementedTargetFailsLoudly();
     caseTwoPortsCoexist();
 
     return Test_Report();

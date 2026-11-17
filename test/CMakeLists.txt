@@ -39,8 +39,15 @@ target_compile_definitions(port_conformance PRIVATE
 target_link_libraries(port_conformance PRIVATE zb_port zb_test_support)
 add_test(NAME port_conformance COMMAND port_conformance)
 
+if (WIN32)
+    add_executable(port_win32 test_port_win32.c port_file_cases.c)
+    target_compile_definitions(port_win32 PRIVATE ZB_SCRATCH_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+    target_link_libraries(port_win32 PRIVATE zb_port zb_test_support)
+    add_test(NAME port_win32 COMMAND port_win32)
+endif ()
+
 if (UNIX)
-    add_executable(port_posix test_port_posix.c)
+    add_executable(port_posix test_port_posix.c port_file_cases.c)
     target_compile_definitions(port_posix PRIVATE ZB_SCRATCH_DIR="${CMAKE_CURRENT_BINARY_DIR}")
     target_link_libraries(port_posix PRIVATE zb_port zb_test_support)
     add_test(NAME port_posix COMMAND port_posix)
@@ -51,14 +58,14 @@ if (UNIX)
     add_executable(port_locate test_port_locate.c)
     target_link_libraries(port_locate PRIVATE zb_port zb_test_support)
     add_test(NAME port_locate COMMAND port_locate WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/locate_fixture)
-
-    # The examples' saved network, on a scratch file and on the samples in examples/config/.
-    add_executable(ex_config_contract test_ex_config.c)
-    target_compile_definitions(ex_config_contract PRIVATE ZB_SCRATCH_DIR="${CMAKE_CURRENT_BINARY_DIR}"
-                               EX_CONFIG_SAMPLES="${CMAKE_SOURCE_DIR}/examples/config")
-    target_link_libraries(ex_config_contract PRIVATE example_config zb_test_support)
-    add_test(NAME ex_config COMMAND ex_config_contract)
 endif ()
+
+# The examples' saved network, on a scratch file and on the samples in examples/config/.
+add_executable(ex_config_contract test_ex_config.c)
+target_compile_definitions(ex_config_contract PRIVATE ZB_SCRATCH_DIR="${CMAKE_CURRENT_BINARY_DIR}"
+                           EX_CONFIG_SAMPLES="${CMAKE_SOURCE_DIR}/examples/config")
+target_link_libraries(ex_config_contract PRIVATE example_config zb_test_support)
+add_test(NAME ex_config COMMAND ex_config_contract)
 
 add_executable(hdlc_contract test_hdlc.c test_fixture.c)
 target_include_directories(hdlc_contract PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -245,6 +252,9 @@ add_test(NAME layers COMMAND layers_contract)
 
 # The object an application meets (D-251): Zb_Stack over loopback models, read only through its events.
 add_executable(stack_contract stack/stack_main.c stack/cases_events.c stack/cases_rcp.c)
+if (UNIX)
+    target_compile_definitions(stack_contract PRIVATE STACK_RCP_CASES=1)    # the RCP on a pseudo-terminal
+endif ()
 target_link_libraries(stack_contract PRIVATE zb_stack zb_test_rig_band_a zb_test_support)
 add_test(NAME stack COMMAND stack_contract)
 
@@ -300,6 +310,9 @@ foreach(testSrc ${U_SSTREAM_TEST_SRCS})
     get_filename_component(testName ${testSrc} NAME_WE)
     add_executable(vendor_${testName} ${testSrc})
     target_link_libraries(vendor_${testName} PRIVATE u_sstream)
+    if (MSVC)
+        target_compile_options(vendor_${testName} PRIVATE /wd4267)    # upstream's size_t into an unsigned, verbatim
+    endif ()
     add_test(NAME u_sstream/${testName} COMMAND vendor_${testName})
 endforeach()
 
@@ -317,9 +330,12 @@ if (ZB_PYTHON)
     add_test(NAME band_a_size
              COMMAND ${ZB_PYTHON} ${CMAKE_SOURCE_DIR}/tools/band_a_size.py ${CMAKE_SOURCE_DIR})
     # The RAM docs/memory.md cites, member by member on the M0+ and on this host: it fails when a struct gains a
-    # declaration its reader cannot measure, so the figures cannot quietly stop being the tree's.
-    add_test(NAME mem_size
-             COMMAND ${ZB_PYTHON} ${CMAKE_SOURCE_DIR}/tools/mem_size.py ${CMAKE_SOURCE_DIR})
+    # declaration its reader cannot measure, so the figures cannot quietly stop being the tree's. Its reader drives a
+    # gcc or clang command line, which MSVC's is not.
+    if (NOT MSVC)
+        add_test(NAME mem_size
+                 COMMAND ${ZB_PYTHON} ${CMAKE_SOURCE_DIR}/tools/mem_size.py ${CMAKE_SOURCE_DIR})
+    endif ()
     # §6's two comment rules, checked over the areas that are migrated and counted over the
     # rest: a gate that fails everywhere on day one is a gate that gets switched off.
     add_test(NAME comment_audit
@@ -342,7 +358,7 @@ if (ZB_PYTHON)
     # refused at configure (D-290): a parent project is configured and built under the build tree.
     add_test(NAME parent_streams
              COMMAND ${ZB_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/parent_streams.py ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}
-                     ${CMAKE_CURRENT_BINARY_DIR}/parent_streams)
+                     ${CMAKE_CURRENT_BINARY_DIR}/parent_streams ${CMAKE_GENERATOR})
     # U_ belongs to the u_* libraries: no library of the tree's own defines a U_ symbol, so an application that links
     # its own u_* copies meets no second definition (docs/internals/coding-rules.md §2).
     if (CMAKE_NM)

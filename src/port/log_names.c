@@ -120,3 +120,73 @@ const char *LogNames_ReasonName(uint32_t reason)
 
     return "unknown";
 }
+
+static uint32_t sinkPutDec(char *at, uint32_t value)
+{
+    char tmp[10];
+    uint32_t n = 0;
+    uint32_t i;
+
+    if (value == 0)
+    {
+        *at = '0';
+        return 1;
+    }
+
+    while (value != 0)
+    {
+        tmp[n] = (char)('0' + (value % 10));
+        value /= 10;
+        n++;
+    }
+
+    for (i = 0; i < n; i++)
+        *at++ = tmp[n - 1 - i];
+
+    return n;
+}
+
+static uint32_t sinkPutHex4(char *at, uint16_t value)
+{
+    static const char nibbles[] = "0123456789ABCDEF";
+    uint32_t i;
+
+    for (i = 0; i < 4; i++)
+        *at++ = nibbles[(value >> (12 - 4 * i)) & 0x0F];
+
+    return 4;
+}
+
+static void sinkPutLit(char **at, const char *text)
+{
+    uint32_t i = 0;
+
+    while (text[i] != '\0')
+    {
+        **at = text[i];
+        (*at)++;
+        i++;
+    }
+}
+
+uint32_t LogNames_Line(char *line, const Log_Record *record)
+{
+    char *at = line;
+
+    sinkPutLit(&at, "LOG ");
+    sinkPutLit(&at, "0x");
+    at += sinkPutHex4(at, record->component);
+    sinkPutLit(&at, " ");
+    sinkPutLit(&at, LogNames_SectionName(record->component >> 8));
+    sinkPutLit(&at, "/");
+    sinkPutLit(&at, LogNames_TopicName(record->component));
+    sinkPutLit(&at, " ");
+    sinkPutLit(&at, LogNames_ReasonName(record->reason));
+    sinkPutLit(&at, " line=");
+    at += sinkPutDec(at, record->line);
+    sinkPutLit(&at, " arg=");
+    at += sinkPutDec(at, record->argument);
+    sinkPutLit(&at, "\n");
+
+    return (uint32_t)(at - line);
+}

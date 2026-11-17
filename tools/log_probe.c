@@ -9,7 +9,14 @@
 #include <stdio.h>
 
 #include "log.h"
+
+#if defined(_WIN32)
+#include "port_log_win32.h"
+#define LOG_PROBE_SINK PortLogWin32_Sink
+#else
 #include "port_log_posix.h"
+#define LOG_PROBE_SINK PortLogPosix_Sink
+#endif
 
 int main(void)
 {
@@ -20,7 +27,7 @@ int main(void)
     ZbStatus status;
 
     Log_Init(&log);
-    PortLogPosix_Sink(&sink);
+    LOG_PROBE_SINK(&sink);
 
     Log_Report(&log, LOG_COMP_PORT_CORE, __LINE__, LOG_REASON_CONFIG, 0x03);
     Log_Report(&log, LOG_COMP_SPINEL_SESSION, __LINE__, LOG_REASON_STATE, 2);

@@ -242,5 +242,5 @@ The caller pumps its own radio as the stack pumps an RCP: the loopback answers a
 
 The Cluster Library has its frame and the Basic cluster, and no other cluster; the application writes other clusters' payloads itself, as §6 does.
 The APS commands beyond key exchange, and some device-object requests, are not built.
-The Windows port is a stub.
+On Windows a ConBee II and a ConBee III have been driven, and a ConBee II pulled mid-run comes back.
 `docs/status.md` keeps the list, with what each gap waits on.

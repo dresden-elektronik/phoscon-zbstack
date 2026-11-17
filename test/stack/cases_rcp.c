@@ -2,6 +2,8 @@
    port, a ConBee's USB one or a RaspBee's UART alike, and this file answers on the other end in the RCP's dialect until
    a case tells it to stop. */
 
+#if STACK_RCP_CASES      /* the pseudo-terminal is POSIX's: on another host this file is empty (stack_main.c) */
+
 #define _POSIX_C_SOURCE 200809
 
 #include <time.h>
@@ -460,3 +462,9 @@ void caseStackRcpUnpluggedIsLostAndComesBack(void)
     (void)rcpTurnUntil(ZB_EVENT_STOPPED, &nowMs, 2000, 0);
     (void)PortPosix_PtyLink(MOCK_RCP_LINK, 0);
 }
+
+#else
+
+typedef int CasesRcpNeedAPseudoTerminal;   /* C99 6.9: a translation unit holds at least one declaration */
+
+#endif

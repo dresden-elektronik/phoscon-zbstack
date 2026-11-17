@@ -3,7 +3,6 @@
 
 #include "port.h"
 #include "port_null.h"
-#include "port_win32.h"
 #include "test_fixture.h"
 #include "test_harness.h"
 
@@ -259,12 +258,11 @@ int main(void)
        port that carries both scripts replays the fixture exactly as a port that carries one does, and the
        two byte sources never meet. The honest per-port line, in the suite that owns each backend:
        `null` scripts it (asserted here, since this binary links the null port; `posix` answers it from the
-       host's own source), asserted in the port_posix suite, the only binary that links that backend; the
-       `win32` stub refuses it, asserted here as the capability line and in port_contract as the stub line,
-       and no part of this conformance result rests on that refusal. */
+       host's own source), asserted in the port_posix suite, the only binary that links that backend; a target
+       that cannot answer it refuses it, asserted in port_contract, and no part of this conformance result rests
+       on that refusal. */
     {
         Port port;
-        Port win32;
         static uint8_t entropyScript[8] = { 0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7 };
         static uint8_t drawn[8];
         uint32_t drawnLen;
@@ -285,13 +283,6 @@ int main(void)
         Test_Expect(Port_Entropy(&port, 0, 8) == ZB_ERR_BAD_ARGUMENT,
                "a request with no buffer is refused on every target before any target is asked");
         Port_Close(&port);
-
-        Port_Init(&win32, PortWin32StubOps());
-        Test_Expect(Port_Entropy(&win32, drawn, 8) == ZB_ERR_UNSUPPORTED,
-               "and the stub's entropy answer is the answer the rest of the stub gives: named as a refusal, and nothing in this suite's result rests on it");
-        Test_Expect(drawn[0] == 0xd0,
-               "a refusal wrote nothing: the octets the null port had just scripted are still in the buffer");
-        Port_Close(&win32);
     }
 
     return Test_Report();

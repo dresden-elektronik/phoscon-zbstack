@@ -18,8 +18,13 @@ import argparse
 import os
 import select
 import sys
-import termios
-import tty
+
+# The port calls are POSIX; the decoders below are not, so a host without termios (Windows) still imports them.
+try:
+    import termios
+    import tty
+except ImportError:
+    termios = tty = None
 
 DEFAULT_PORT = None  # no port is ever defaulted: several RCPs of one kind share a name prefix
 
@@ -343,6 +348,8 @@ def parse_spinel(frame: bytes, fcs_ok: bool) -> str:
 
 # --- port handling (macOS/BSD termios, raw, non-blocking reads via select) ---
 def open_port(path: str, baud: int) -> int:
+    if termios is None:
+        sys.exit("the harness opens a port through termios, which this host does not have")
     bconst = getattr(termios, f"B{baud}", None)
     if bconst is None:
         sys.exit(f"unsupported baud {baud}")

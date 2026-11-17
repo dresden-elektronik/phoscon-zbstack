@@ -3,7 +3,18 @@
 
 #include <stdio.h>
 #include <string.h>
+
+/* A directory where the save writes first, which only the platform can make; remove() takes an empty one away on POSIX
+   and not on Windows. */
+#if defined(_WIN32)
+#include <direct.h>
+#define EX_MAKE_DIRECTORY(path) _mkdir(path)
+#define EX_REMOVE_DIRECTORY(path) _rmdir(path)
+#else
 #include <sys/stat.h>
+#define EX_MAKE_DIRECTORY(path) mkdir((path), 0700)
+#define EX_REMOVE_DIRECTORY(path) remove(path)
+#endif
 
 #include "ex_config.h"
 #include "port_file.h"
@@ -239,14 +250,14 @@ static void caseFailedSaveKeepsTheFile(void)
     exFull(&s_full);
     Test_Expect(Ex_ConfigSave(&s_full, SCRATCH_CONFIG) == 1, "a config is saved");
 
-    (void)remove(SCRATCH_CONFIG ".tmp");
-    Test_Expect(mkdir(SCRATCH_CONFIG ".tmp", 0700) == 0, "a directory stands where the save writes first");
+    (void)EX_REMOVE_DIRECTORY(SCRATCH_CONFIG ".tmp");
+    Test_Expect(EX_MAKE_DIRECTORY(SCRATCH_CONFIG ".tmp") == 0, "a directory stands where the save writes first");
 
     s_full.channel = 11;
     Test_Expect(Ex_ConfigSave(&s_full, SCRATCH_CONFIG) == 0, "so the next save fails");
     Test_Expect(Ex_ConfigLoad(&s_read, SCRATCH_CONFIG) == 1 && s_read.channel == 25,
                 "and the file holds the config saved before it");
-    (void)remove(SCRATCH_CONFIG ".tmp");
+    (void)EX_REMOVE_DIRECTORY(SCRATCH_CONFIG ".tmp");
 
     memset(longPath, 'a', EX_CONFIG_PATH_MAX);
     Test_Expect(Ex_ConfigSave(&s_full, longPath) == 0, "a path with no room for its .tmp is refused");

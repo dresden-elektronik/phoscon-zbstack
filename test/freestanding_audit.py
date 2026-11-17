@@ -18,7 +18,7 @@ import bands_audit  # one definition of what a platform header is, shared with t
 CFLAGS = ["-std=c99", "-ffreestanding", "-Wall", "-Wextra", "-pedantic"]
 # Derived, not listed: every directory under src/ and each vendored library's own
 # directory. A gate that has to be told about a new module is a gate that misses it.
-PER_TARGET_ROOT = os.path.join("src", "port")
+PER_TARGET_ROOT = "src/port"
 
 
 def firstLines(text, count=3):
@@ -36,7 +36,7 @@ def platformBackends(root):
     are excluded from the gate because they are the code the gate exists to isolate."""
     backends = []
     for rel in bands_audit.sourceFiles(root, only=("src",)):
-        if not rel.endswith(".c") or not rel.startswith(PER_TARGET_ROOT + os.sep):
+        if not rel.endswith(".c") or not rel.startswith(PER_TARGET_ROOT + "/"):
             continue
         with open(os.path.join(root, rel), "r", encoding="utf-8", errors="replace") as handle:
             for line in handle:
@@ -92,7 +92,7 @@ def main():
                     failures.append(f"{rel}:{number}: <{match.group(2)}> is not a freestanding header")
 
     for rel in sources:
-        obj = os.path.join(outDir, rel.replace(os.sep, "_") + ".o")
+        obj = os.path.join(outDir, rel.replace("/", "_") + ".o")
         result = run([compiler] + CFLAGS + includes + ["-c", os.path.join(root, rel), "-o", obj])
         if result.returncode != 0 or result.stdout.strip():
             failures.append(f"{rel}: {firstLines(result.stdout)}")
@@ -102,7 +102,7 @@ def main():
     if probe.returncode == 0 and "wasm32" in probe.stdout:
         wasmSources = sources          # per-target backends are already out of `sources`
         for rel in wasmSources:
-            obj = os.path.join(outDir, rel.replace(os.sep, "_") + ".wasm")
+            obj = os.path.join(outDir, rel.replace("/", "_") + ".wasm")
             result = run([compiler] + CFLAGS + ["-nostdlib", "-target", "wasm32", "-O2"]
                          + includes + ["-c", os.path.join(root, rel), "-o", obj])
             if result.returncode != 0 or result.stdout.strip():
