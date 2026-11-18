@@ -45,6 +45,7 @@ int main(void)
     caseRefusedExtractionKeepsItsNumber();
     caseTimedOutExtractionReleasesItsAttempt();
     caseEmptyPollAnswer();
+    caseEmptyPollEndedByTheAck();
     caseOwnDataRequestIsNotAnswered();
     casePollAnsweredWithoutAParentRole();
     casePollAtAnUnassociatedDeviceIsNotAnswered();

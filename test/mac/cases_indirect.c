@@ -1269,6 +1269,45 @@ void casePendingTableFollowsTheQueue(void)
 
 
 
+/* 10.22.3's zero-length frame answers an Ack that said a frame is pending: after a complete table left the device
+   out, the radio's Ack said nothing is, the poll is over and nothing follows it; an Ack the radio reports pending
+   still gets the frame. */
+void caseEmptyPollEndedByTheAck(void)
+{
+    Test_BandA dev;
+    Radio_Caps caps;
+    Loopback_Sent sent[MAC_TX_TRACK_MAX + 1];
+    Loopback_FrameSpec spec;
+    uint8_t poll[RADIO_MPDU_MAX];
+    Mac_Counters counters;
+
+    Test_BandACapsPendingTable(&caps);
+    rigConfig(&dev, &caps, COORDINATOR_SHORT, PAN_ID, 0);
+    Test_Expect(LoopbackRadio_PendingIsComplete(&dev.model) == 1 && LoopbackRadio_PendingShortCount(&dev.model) == 0,
+                "adoption states a complete, empty table");
+
+    injectPoll(&dev.model, 0x40, SLEEPY_A, 1000);
+    Test_ExpectStatus(Mac_Step(&dev.mac, 100), ZB_OK, "A polls with nothing held for it");
+    Test_ExpectCount(LoopbackRadio_Sent(&dev.model, sent, MAC_TX_TRACK_MAX + 1), 0,
+                     "and nothing is sent: the radio's Ack said nothing is pending, which ends the poll (10.22.3)");
+    counters = Mac_CountersOf(&dev.mac);
+    Test_ExpectCount(counters.pollsEndedByAck, 1, "the poll is counted as the Ack's");
+    Test_ExpectCount(counters.pollsUnanswered, 0, "and not as one with nowhere to put an answer");
+
+    Zb_memset(&spec, 0, (uint32_t)sizeof spec);
+    spec.len = composePoll(poll, 0x41, SLEEPY_A);
+    spec.bytes = poll;
+    spec.rssiDbm = -70;
+    spec.lqi = 200;
+    spec.stampTicks = 2000;
+    spec.ackedWithFramePending = 1;
+    Test_ExpectStatus(LoopbackRadio_Inject(&dev.model, &spec, 1), ZB_OK, "A polls again, and the radio reports an Ack that said pending");
+    Test_ExpectStatus(Mac_Step(&dev.mac, 200), ZB_OK, "the poll is stepped");
+    Test_ExpectCount(LoopbackRadio_Sent(&dev.model, sent, MAC_TX_TRACK_MAX + 1), 1,
+                     "so the zero-length frame A now listens for goes out");
+    Test_Expect(sent[0].len == 11 && sent[0].ackRequest == 0, "eleven octets, asking no acknowledgment (10.22.3)");
+}
+
 /* 10.22.2 makes the acknowledgment the proof of an extraction "if one was requested", so a frame that asks for
    none is extracted by the transmission the radio reports, and is discarded rather than offered again. */
 void caseUnacknowledgedExtractionLeavesTheQueue(void)

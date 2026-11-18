@@ -315,9 +315,9 @@ static Mac_AddrMode macCoordinatorSrcMode(const Radio_Pib *pib, int ownExtendedK
     return MAC_ADDR_NONE;
 }
 
-/* One detected poll, answered: the oldest transaction queued for it goes out with Frame Pending stating whether
-   more is behind it (10.22.2), or a zero-length frame that asks no acknowledgment says nothing is pending
-   (10.22.3). A poll whose transactions are all mid-attempt gets neither and is counted (6.6.3.4). */
+/* One poll answered: its oldest transaction, Frame Pending saying whether more is behind it (10.22.2); else after an
+   Ack that said pending a zero-length frame asking no Ack (10.22.3), and nothing after one a complete table had say
+   nothing waits. A poll whose transactions are all mid-attempt gets neither and is counted (6.6.3.4). */
 ZbStatus MacIndirect_DoPollAnswer(Mac_Indirect *indirect, const Mac_PollArrival *poll, Mac_Tx *tx,
                                   const Radio_Pib *pib, int ownExtendedKnown, uint64_t ownExtended,
                                   Radio_Radio *radio, uint8_t *mpdu, uint32_t mpduCap, uint32_t *dsn,
@@ -372,6 +372,12 @@ ZbStatus MacIndirect_DoPollAnswer(Mac_Indirect *indirect, const Mac_PollArrival 
     if (MacIndirect_QueuedFor(indirect, poll) != 0)
     {
         indirect->pollsUnanswered++;
+        return ZB_OK;
+    }
+
+    if (indirect->pendingStatedComplete && !poll->ackedWithFramePending)
+    {
+        indirect->pollsEndedByAck++;
         return ZB_OK;
     }
 

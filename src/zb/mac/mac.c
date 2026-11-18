@@ -265,7 +265,7 @@ static void macStatePendingTable(Mac_Mac *self)
     }
 
     pending.isComplete = complete;
-    (void)self->radio->ops->pendingTable(self->radio, &pending);
+    self->indirect.pendingStatedComplete = self->radio->ops->pendingTable(self->radio, &pending) == ZB_OK && complete;
 }
 
 /* Set after Mac_Init, which resets band A's own footprint, and stated to the radio there as well. */
@@ -882,6 +882,7 @@ Mac_Counters Mac_CountersOf(const Mac_Mac *self)
     counters.commStatusQueue = self->indirect.commStatusCount;
     counters.commStatusRefused = self->indirect.commStatusRefused;
     counters.pollsUnanswered = self->indirect.pollsUnanswered;
+    counters.pollsEndedByAck = self->indirect.pollsEndedByAck;
     counters.pibReapplications = self->pibReapplications;
     counters.acksHeard = self->rx.acksHeard;
     counters.commandsHeard = self->rx.commandsHeard;

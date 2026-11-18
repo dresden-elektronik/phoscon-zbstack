@@ -349,7 +349,7 @@
     "executable": "loopback_radio"
   },
   "mac": {
-    "assertions": 1564,
+    "assertions": 1573,
     "caseOrder": [
       "caseAdoption",
       "caseDsnStartComesFromTheConfig",
@@ -383,6 +383,7 @@
       "caseRefusedExtractionKeepsItsNumber",
       "caseTimedOutExtractionReleasesItsAttempt",
       "caseEmptyPollAnswer",
+      "caseEmptyPollEndedByTheAck",
       "caseOwnDataRequestIsNotAnswered",
       "casePollAnsweredWithoutAParentRole",
       "casePollAtAnUnassociatedDeviceIsNotAnswered",
@@ -461,7 +462,7 @@
       "caseOnAirCompositionIsTheCapturedFrame",
       "caseOnAirReceiptIsTheCapturedFields"
     ],
-    "cases": 109,
+    "cases": 110,
     "executable": "mac_contract"
   },
   "mac_frame": {

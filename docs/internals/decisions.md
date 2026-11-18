@@ -1596,7 +1596,7 @@ No frame a device sends carries both forms, so a device that never associated he
 The RCP composes the Ack, so the host cannot set the bit.
 The table names every device a frame waits for, in both forms this MAC knows (D-158).
 A statement it cannot complete, a held device's other form unknown or a list full, clears the enable bit: every Ack then claims pending, 10.22.3's answer for a coordinator that cannot know.
-An empty complete table means nothing is pending.
+An empty complete table means nothing is pending, and no zero-length frame follows that Ack.
 
 **Consequences.**
 The seam carries `Radio_Ops.pendingTable` and `Radio_Pending.isComplete`; band B writes the three properties as one statement at adoption, on every queue move and after a reset (`docs/internals/protocol.md` §7.4.5).
@@ -2296,7 +2296,7 @@ Open as a number.
 The RCP composes the acknowledgement within the 12-symbol turnaround, and no measured build lets the host compose or amend it.
 R23.1 D.10.2.3's "SHALL affect the pending bit in the ACK frame" assumes a host-owned acknowledgement; the pending table is how the host satisfies it.
 802.15.4-2024 has no poll-reception primitive, so the coordinator's half is a band A queue plus a band A event.
-Each delivered transaction carries Frame Pending per 10.22.2, and an empty poll gets 10.22.3's zero-length answer.
+Each delivered transaction carries Frame Pending per 10.22.2, and an empty poll gets 10.22.3's zero-length answer only after an Ack that said pending: a complete table, or the radio's ACKED_FP report, says which.
 
 **Consequences.**
 A sleepy child pays one extra poll round trip, and a bare-transceiver backend could later state pending in its own acknowledgement.

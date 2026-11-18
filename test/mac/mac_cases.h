@@ -61,6 +61,7 @@ void casePollExtractionOrder(void);
 void caseRefusedExtractionKeepsItsNumber(void);
 void caseTimedOutExtractionReleasesItsAttempt(void);
 void caseEmptyPollAnswer(void);
+void caseEmptyPollEndedByTheAck(void);
 void caseOwnDataRequestIsNotAnswered(void);
 void casePollAnsweredWithoutAParentRole(void);
 void casePollAtAnUnassociatedDeviceIsNotAnswered(void);

@@ -28,7 +28,8 @@ typedef struct Mac_AddressPair
 } Mac_AddressPair;
 
 /* The indirect subject's own state: the pool 10.22.2 holds a sleeping device's frames in, the two numbers the
-   queue is read by, and the pairs its address forms are matched through. */
+   queue is read by, and the pairs its address forms are matched through; `pendingStatedComplete` says the radio
+   holds a complete pending table, so its Ack's bit is the queue's and an empty poll its Ack ended is counted. */
 typedef struct Mac_Indirect
 {
     Mac_Transaction transactions[MAC_TRANSACTION_MAX];
@@ -39,6 +40,8 @@ typedef struct Mac_Indirect
     uint32_t confirmHead;
     uint32_t confirmCount;
     uint32_t pollsUnanswered;
+    uint32_t pollsEndedByAck;
+    int pendingStatedComplete;
 
     Mac_AddressPair pairs[MAC_ADDRESS_PAIR_MAX];
     uint32_t pairsLearned;

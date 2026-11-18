@@ -356,8 +356,8 @@ typedef struct Mac_Transaction
 } Mac_Transaction;
 
 /* A Data Request this coordinator received, as R23.1 Annex D.10.2 names its event, MLME-Poll.indication
-   {AddrMode, DeviceAddress}, the two fields below; `dsn`, `stampTicks` and `framePending`, whether the queue held
-   a transaction for that device as it arrived, are house fields. The raw frame stays in the indication queue. */
+   {AddrMode, DeviceAddress}, the two fields below; `dsn`, `stampTicks`, `framePending` (the queue held a frame for
+   it) and the radio's report of its Ack's bit are house fields. The raw frame stays in the indication queue. */
 typedef struct Mac_PollArrival
 {
     Mac_AddrMode addrMode;
@@ -366,6 +366,7 @@ typedef struct Mac_PollArrival
     uint32_t dsn;
     uint64_t stampTicks;
     int framePending;
+    int ackedWithFramePending;
 } Mac_PollArrival;
 
 /* R23.1 D.10.2's events as the band holds them: the ring the receive classification queues into and the layer
@@ -511,6 +512,7 @@ typedef struct Mac_Counters
     uint32_t commStatusQueue;
     uint32_t commStatusRefused;
     uint32_t pollsUnanswered;
+    uint32_t pollsEndedByAck;
     uint32_t pibReapplications;
     uint32_t acksHeard;
     uint32_t commandsHeard;

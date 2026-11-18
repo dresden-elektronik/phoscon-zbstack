@@ -210,6 +210,7 @@ static void macRecordPoll(Mac_Rx *rx, Mac_PollEvents *polls, const Mac_Indirect 
     arrival.dsn = header->seq;
     arrival.stampTicks = frame->deviceStampTicks;
     arrival.framePending = MacIndirect_QueuedFor(indirect, &arrival) != 0;
+    arrival.ackedWithFramePending = frame->ackedWithFramePending;
 
     rx->stepPolls[rx->stepPollCount] = arrival;
     rx->stepPollCount++;
